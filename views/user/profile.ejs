@@ -1,0 +1,67 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<div class="container py-5">
+
+    <!-- Profile Header -->
+    <div class="profile-header mb-5">
+        <h1>About ME</h1>
+        <div class="profile-avatar">
+            <% if(user.avatar){ %>
+                <img src="<%= user.avatar %>" alt="">
+            <% } else { %>
+               
+            <% } %>
+        </div>
+
+        <div class="profile-info">
+            <h1><%= user.username %></h1>
+            <p class="text-muted"><%= user.email %></p>
+            <p class="text-muted">Role - <%= user.role %></p>
+            <div class="member-badge">
+                StayEase Member
+            </div>
+
+            <small>
+                Joined
+                <%= new Date(user.createdAt).toLocaleDateString() %>
+            </small>
+        </div>
+
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+            <div class="stat-card">
+               <div class="fw-bold "><h2><%= user.bookings.length %></h2></div>
+                <p>Bookings</p>
+            </div>
+        </div>
+
+        
+
+    </div>
+
+    <!-- Actions -->
+
+    <div class="action-section mb-5">
+        <a href="/bookings" class="btn btn-dark">
+            My Trips
+        </a>
+
+        <% if (user.role=="host") { %>
+            <a href="/stays/new" class="btn btn-outline-dark">
+            Host a Stay
+        </a>
+        <% } %>
+    </div>
+
+    <!-- Recent Bookings
+
+   
+
+    <!-- Hosted Properties -->
+
+    
+
+</div>

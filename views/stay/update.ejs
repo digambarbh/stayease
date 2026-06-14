@@ -1,0 +1,209 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+    <section class="container py-5">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <!-- Card -->
+
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+                    <!-- Header -->
+
+                    <div class="bg-dark text-white p-4">
+
+                        <h2 class="fw-bold mb-1">
+                            Register New Stay
+                        </h2>
+
+                        <p class="mb-0 text-light">
+                            Add your property and start hosting guests.
+                        </p>
+
+                    </div>
+
+                    <!-- Form Body -->
+
+                    <div class="card-body p-5">
+
+                        <form action="/stays/<%= stay._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
+
+                            <!-- Stay Name -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Stay Name
+                                </label>
+
+                                <input type="text" name="stay[name]" class="form-control form-control-lg rounded-3"
+                                    placeholder="Ocean View Villa" value="<%= stay.name %>" required>
+
+                            </div>
+
+                            <!-- Description -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Description
+                                </label>
+
+                                <textarea name="stay[description]" rows="5" class="form-control rounded-3"
+                                    placeholder="Describe your property..." required><%= stay.description %></textarea>
+
+                            </div>
+
+                            <!-- Price & Capacity -->
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">
+                                        Price Per Night
+                                    </label>
+
+                                    <div class="input-group input-group-lg">
+
+                                        <span class="input-group-text">
+                                            ₹
+                                        </span>
+
+                                        <input type="number" name="stay[price]" class="form-control" placeholder="2500"
+                                            value="<%= stay.price %>" required>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">
+                                        Capacity
+                                    </label>
+
+                                    <input type="number" name="stay[capacity]"
+                                        class="form-control form-control-lg rounded-3" placeholder="4 Guests"
+                                        value="<%= stay.capacity %>" required>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Location -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Location
+                                </label>
+
+                                <input type="text" name="stay[location]" class="form-control form-control-lg rounded-3"
+                                    placeholder="Nashik, Maharashtra" value="<%= stay.location %>" required>
+
+                            </div>
+                            <!-- Images -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Current Images
+                                </label>
+
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <% if (stay.images && stay.images.length) { %>
+                                        <% stay.images.forEach(img => { %>
+                                            <div class="position-relative" style="width:120px">
+                                                <img src="<%= img.url %>" class="img-fluid rounded-3" alt="image">
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox" name="deleteImages" value="<%= img.filename %>" id="del-<%= img.filename %>">
+                                                    <label class="form-check-label small" for="del-<%= img.filename %>">Remove</label>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <p class="text-muted">No images yet.</p>
+                                    <% } %>
+                                </div>
+
+                                <label class="form-label fw-semibold">
+                                    Upload New Images
+                                </label>
+
+                                <input type="file" name="image" class="form-control rounded-3 mb-3" multiple>
+
+                            </div>
+
+                            <!-- Stay Type -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Stay Type
+                                </label>
+
+                                <select name="stay[type]" class="form-select form-select-lg rounded-3" required>
+
+                                    <option value="apartment" <%=stay.type==="apartment" ? "selected" : "" %>>
+                                        Apartment
+                                    </option>
+
+                                    <option value="villa" <%=stay.type==="villa" ? "selected" : "" %>>
+                                        Villa
+                                    </option>
+
+                                    <option value="cabin" <%=stay.type==="cabin" ? "selected" : "" %>>
+                                        Cabin
+                                    </option>
+
+                                    <option value="cottage" <%=stay.type==="cottage" ? "selected" : "" %>>
+                                        Cottage
+                                    </option>
+
+                                    <option value="hotel" <%=stay.type==="hotel" ? "selected" : "" %>>
+                                        Hotel
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <!-- Availability -->
+
+                            <div class="form-check form-switch mb-4">
+                                <div class="form-check form-switch mb-4">
+
+                                    <input class="form-check-input" type="checkbox" name="stay[isAvailable]"
+                                        value="true" <%=stay.isAvailable ? "checked" : "" %>
+                                    >
+
+                                    <label class="form-check-label fw-semibold">
+                                        Available For Booking
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Submit Button -->
+
+                            <button type="submit" class="btn btn-dark btn-lg w-100 rounded-3">
+
+                                Publish Stay
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>

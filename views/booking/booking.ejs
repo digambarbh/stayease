@@ -1,0 +1,138 @@
+<%- layout("/layouts/boilerplate.ejs") %>
+
+<section class="container d-flex justify-content-center align-items-center min-vh-100">
+
+    <div class="border rounded p-4 shadow bg-white" style="width: 550px;">
+
+        <h3 class="mb-1 text-center">
+            Book Your Stay
+        </h3>
+
+        <!-- Stay Name -->
+        <p class="text-center text-muted mb-4" style="font-size: 0.9rem;">
+            📍 <%= stay.name %>
+        </p>
+
+        <form action="/bookings/<%= stay._id %>" method="POST">
+
+            <!-- Check-in Date -->
+            <div class="mb-3">
+                <label class="form-label">Check-in Date</label>
+                <input
+                    type="date"
+                    name="checkIn"
+                    class="form-control"
+                    required
+                >
+            </div>
+
+            <!-- Check-out Date -->
+            <div class="mb-3">
+                <label class="form-label">Check-out Date</label>
+                <input
+                    type="date"
+                    name="checkOut"
+                    class="form-control"
+                    required
+                >
+            </div>
+
+            <!-- Guests -->
+            <div class="mb-3">
+                <label class="form-label">Number of Guests</label>
+                <input
+                    type="number"
+                    name="guests"
+                    class="form-control"
+                    min="1"
+                    max="<%= stay.maxGuests %>"
+                    placeholder="Enter number of guests"
+                    required
+                >
+            </div>
+            <!-- Price Summary -->
+            <div class="mb-4 p-3 rounded" style="background-color: #f8f9fa;">
+
+                <div class="d-flex justify-content-between mb-1">
+                    <small class="text-muted">Stay</small>
+                    <small class="fw-semibold"><%= stay.name %></small>
+                </div>
+
+                <div class="d-flex justify-content-between mb-1">
+                    <small class="text-muted">Price per night</small>
+                    <small>&#8377;<%= stay.price %></small>
+                </div>
+
+                <div class="d-flex justify-content-between mb-1">
+                    <small class="text-muted">Nights</small>
+                    <small id="nightCount">-</small>
+                </div>
+
+                <hr class="my-2">
+
+                <div class="d-flex justify-content-between">
+                    <small class="fw-bold">Total</small>
+                    <small class="fw-bold" id="totalPrice">-</small>
+                </div>
+
+            </div>
+
+            <!-- Hidden fields -->
+            <input type="hidden" name="totalPrice" id="totalPriceInput">
+            <input type="hidden" name="nights" id="nightsInput">
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn-dark w-100">
+                Confirm Booking
+            </button>
+
+        </form>
+
+        <div class="text-center mt-3">
+            <small>
+                <a href="/stays/<%= stay._id %>" class="text-decoration-none text-muted">
+                    ← Back to <%= stay.name %>
+                </a>
+            </small>
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+    const pricePerNight = "<%= stay.price %>";
+
+    const checkIn  = document.querySelector('input[name="checkIn"]');
+    const checkOut = document.querySelector('input[name="checkOut"]');
+
+    // Set min date to today
+    const today = new Date().toISOString().split("T")[0];
+    checkIn.min  = today;
+    checkOut.min = today;
+
+    function calculateTotal() {
+        const inDate  = new Date(checkIn.value);
+        const outDate = new Date(checkOut.value);
+
+        if (checkIn.value && checkOut.value && outDate > inDate) {
+            const nights = Math.ceil((outDate - inDate) / (1000 * 60 * 60 * 24));
+            const total  = nights * pricePerNight;
+
+            document.getElementById("nightCount").textContent = nights + " night(s)";
+            document.getElementById("totalPrice").textContent = "₹" + total.toLocaleString("en-IN");
+            document.getElementById("totalPriceInput").value  = total;
+            document.getElementById("nightsInput").value      = nights;
+        } else {
+            document.getElementById("nightCount").textContent = "-";
+            document.getElementById("totalPrice").textContent = "-";
+        }
+    }
+
+    checkIn.addEventListener("change", () => {
+        checkOut.min = checkIn.value;
+        calculateTotal();
+    });
+
+    checkOut.addEventListener("change", calculateTotal);
+</script>

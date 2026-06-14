@@ -1,0 +1,354 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+    .main-stay-img {
+        height: 500px;
+        object-fit: cover;
+    }
+
+    .extra-stay-img {
+        height: 130px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .stay-sidebar-card {
+        position: sticky;
+        top: 100px;
+    }
+
+    #map {
+        height: 400px;
+        width: 100%;
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+    @media (max-width: 991px) {
+        .stay-sidebar-card {
+            position: static;
+            top: auto;
+        }
+
+        .main-stay-img {
+            height: 350px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .main-stay-img {
+            height: 250px;
+            border-radius: 0.75rem !important;
+        }
+
+        .extra-stay-img {
+            height: 90px;
+            border-radius: 0.75rem !important;
+        }
+
+        #map {
+            height: 280px;
+        }
+
+        .fs-2 {
+            font-size: 1.5rem !important;
+        }
+
+        h2.fw-bold {
+            font-size: 1.4rem;
+        }
+
+        .card-body.p-4 {
+            padding: 1.25rem !important;
+        }
+    }
+</style>
+
+    <section class="container py-5">
+
+        <!-- Back Button -->
+
+        <div class="mb-4">
+
+            <a href="/stays" class="btn btn-outline-dark rounded-pill px-4">
+                ← Back to Stays
+            </a>
+
+        </div>
+
+        <!-- Main Content -->
+
+        <div class="row g-4 g-lg-5">
+
+            <!-- Left Side -->
+
+            <div class="col-12 col-lg-7">
+
+                <!-- Main Image -->
+
+                <div class="mb-4">
+
+                    <img src="<%= (stay.images && stay.images[0]) ? stay.images[0].url : 'https://via.placeholder.com/900x500?text=No+image' %>"
+                        alt="stay image" class="img-fluid rounded-4 shadow-sm w-100 main-stay-img">
+
+                </div>
+
+                <!-- Extra Images -->
+
+                <% if(stay.images.length > 1) { %>
+
+                    <div class="row g-2 g-md-3 mb-4">
+
+                        <% for(let image of stay.images.slice(1)) { %>
+
+                            <div class="col-4">
+
+                                <img src="<%= image.url %>" class="img-fluid rounded-4 extra-stay-img">
+
+                            </div>
+
+                            <% } %>
+
+                    </div>
+
+                    <% } %>
+
+                        <!-- Description -->
+
+                        <div class="card border-0 shadow-sm rounded-4">
+
+                            <div class="card-body p-4">
+
+                                <h3 class="fw-bold mb-3">
+                                    About this stay
+                                </h3>
+
+                                <p class="text-secondary mb-0 lh-lg">
+
+                                    <%= stay.description %>
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+            </div>
+
+            <!-- Right Side -->
+
+            <div class="col-12 col-lg-5">
+
+                <div class="card border-0 shadow rounded-4 stay-sidebar-card">
+
+                    <div class="card-body p-4">
+
+                        <!-- Title -->
+
+                        <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+
+                            <div>
+
+                                <h2 class="fw-bold mb-1">
+
+                                    <%= stay.name %>
+
+                                </h2>
+
+                                <p class="text-muted mb-0">
+
+                                    📍 <%= stay.location %>
+
+                                </p>
+
+                            </div>
+
+                            <% if(stay.isAvailable) { %>
+
+                                <span class="badge bg-success rounded-pill px-3 py-2">
+
+                                    Available
+
+                                </span>
+
+                                <% } else { %>
+
+                                    <span class="badge bg-danger rounded-pill px-3 py-2">
+
+                                        Booked
+
+                                    </span>
+
+                                    <% } %>
+
+                        </div>
+
+                        <!-- Info -->
+
+                        <div class="d-flex gap-2 gap-md-3 mb-4 flex-wrap">
+
+                            <span class="badge bg-light text-dark border px-3 py-2">
+
+                                <%= stay.type %>
+
+                            </span>
+
+                            <span class="badge bg-light text-dark border px-3 py-2">
+
+                                👥 <%= stay.capacity %> Guests
+
+                            </span>
+
+                        </div>
+
+                        <!-- Price -->
+
+                        <div class="mb-4">
+
+                            <span class="fs-2 fw-bold">
+
+                                ₹<%= stay.price %>
+
+                            </span>
+
+                            <span class="text-muted">
+                                / night
+                            </span>
+
+                        </div>
+
+                        <!-- Booking Button -->
+
+                        <% if(stay.isAvailable) { %>
+
+                            <a href="/bookings/new/<%= stay._id %>" class="btn btn-dark btn-lg w-100 rounded-3 mb-3">
+                                Reserve Now
+                            </a>
+
+                            <% } else { %>
+
+                                <button class="btn btn-secondary btn-lg w-100 rounded-3 mb-3" disabled>
+                                    Currently Unavailable
+                                </button>
+
+                                <% } %>
+
+                                    <!-- Wishlist -->
+
+                                    <a href="/wishlist/<%= stay._id %>" class="btn btn-outline-dark w-100 rounded-3">
+                                        Add to Wishlist
+                                    </a>
+
+                                    <% if (currentUser && stay.host && stay.host.equals(currentUser._id)) { %>
+
+                                        <!-- Host Actions -->
+                                        <div class="d-flex gap-2 mt-3">
+
+                                            <!-- Update -->
+
+                                            <a href="/stays/<%= stay._id %>/update"
+                                                class="btn btn-outline-dark w-50 rounded-3">
+                                                Update
+                                            </a>
+
+                                            <!-- Delete -->
+
+                                            <form action="/stays/<%= stay._id %>?_method=DELETE" method="POST"
+                                                class="w-50">
+
+                                                <button type="submit" class="btn btn-danger w-100 rounded-3">
+                                                    Delete
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+                                        <% } %>
+
+                                            <!-- Host -->
+
+                                            <% if(stay.host) { %>
+
+                                                <hr class="my-4">
+
+                                                <div>
+
+                                                    <small class="text-muted d-block mb-1">
+
+                                                        Hosted By
+
+                                                    </small>
+
+                                                    <h6 class="fw-bold mb-0">
+
+                                                        <%= stay.host.username %>
+
+                                                    </h6>
+
+                                                </div>
+
+                                                <% } %>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Map -->
+        <div class="mt-4">
+            <div id="map"></div>
+        </div>
+
+    </section>
+    <script>
+    const stay = <%- JSON.stringify(stay) %>;
+
+    const map = new maplibregl.Map({
+        container: 'map',
+        style: 'https://api.maptiler.com/maps/outdoor-v2/style.json?key=jn2m96VkWzLi3t7qoZeT',
+        center: [stay.geometry.lng, stay.geometry.lat],
+        zoom: 12
+    });
+
+    // Popup
+    const popup = new maplibregl.Popup({
+        offset: 25
+    }).setHTML(`
+        <div>
+            <h6 class="mb-1">${stay.name}</h6>
+            <p class="mb-0">₹${stay.price}/night</p>
+        </div>
+    `);
+
+    // Marker with popup
+    new maplibregl.Marker()
+        .setLngLat([
+            stay.geometry.lng,
+            stay.geometry.lat
+        ])
+        .setPopup(popup)
+        .addTo(map);
+
+    // Zoom + Compass
+    map.addControl(
+        new maplibregl.NavigationControl(),
+        'top-right'
+    );
+    // User Location
+    map.addControl(
+        new maplibregl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+            trackUserLocation: true,
+            showUserHeading: true
+        }),
+        'top-right'
+    );
+
+    // Resize map correctly on window resize
+    window.addEventListener('resize', () => map.resize());
+</script>

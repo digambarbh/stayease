@@ -1,0 +1,71 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<section class="container d-flex justify-content-center align-items-center min-vh-100">
+
+    <div class="border rounded p-4 shadow bg-white" style="width: 550px;">
+
+        <h3 class="mb-4 text-center">
+            Welcome Back
+        </h3>
+
+        <form action="/user/login" method="POST">
+            <input type="hidden" name="redirect" value="<%= redirect %>">
+            <!-- Email -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+            <!-- Password -->
+
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+            <!-- Submit -->
+
+            <button class="btn btn-dark w-100">
+                Login
+            </button>
+
+        </form>
+
+        <div class="text-center mt-3">
+
+            <small>
+
+                Don't have an account?
+
+                <a href="/user/register">
+                    Register
+                </a>
+
+            </small>
+
+        </div>
+
+    </div>
+
+</section>
