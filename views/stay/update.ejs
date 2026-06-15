@@ -115,18 +115,20 @@
 
                                 <div class="d-flex flex-wrap gap-3 mb-3">
                                     <% if (stay.images && stay.images.length) { %>
-                                        <% stay.images.forEach(img => { %>
+                                        <% stay.images.forEach(img=> { %>
                                             <div class="position-relative" style="width:120px">
                                                 <img src="<%= img.url %>" class="img-fluid rounded-3" alt="image">
                                                 <div class="form-check mt-2">
-                                                    <input class="form-check-input" type="checkbox" name="deleteImages" value="<%= img.filename %>" id="del-<%= img.filename %>">
-                                                    <label class="form-check-label small" for="del-<%= img.filename %>">Remove</label>
+                                                    <input class="form-check-input" type="checkbox" name="deleteImages"
+                                                        value="<%= img.filename %>" id="del-<%= img.filename %>">
+                                                    <label class="form-check-label small"
+                                                        for="del-<%= img.filename %>">Remove</label>
                                                 </div>
                                             </div>
-                                        <% }) %>
-                                    <% } else { %>
-                                        <p class="text-muted">No images yet.</p>
-                                    <% } %>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <p class="text-muted">No images yet.</p>
+                                                    <% } %>
                                 </div>
 
                                 <label class="form-label fw-semibold">

@@ -11,13 +11,13 @@ const Booking = require('../model/booking')
 require('dotenv').config()
 const { cloudinary, storage } = require("../cloudinary")
 const upload = multer({ storage })
-
+const catchAsync= require("../utility/catchAsync")
 
 router.get('/register', (req, res) => {
     res.render("user/register")
 })
 
-router.post('/register', async (req, res) => {
+router.post('/register',catchAsync(async (req, res) => {
     const { username, email, phone, role } = req.body
     const password = await bcrypt.hash(req.body.password, 12)
     const user = await User.insertOne({ username, email, phone, password, role })
@@ -27,10 +27,11 @@ router.post('/register', async (req, res) => {
         secure: false,
     }
     res.cookie("token",token,cookieOption)
-    res.status(201).json({message:"registerd successfully"})
+    res.cookie("flash",{type:"success",message:"Welcome to StayEase"})
+    res.redirect("/user/profile")
 
     // res.redirect("/")
-})
+}))
 
 
 
@@ -44,11 +45,13 @@ router.post("/login", async (req, res) => {
     const { email, password, redirect } = req.body
     const user = await User.findOne({ email: email })
     if (!user) {
-        throw Error("username or password incorrect")
+        res.cookie("flash",{type:"danger",message:"username or password incorrect"})
+        res.redirect("/user/login")
     }
     const match = await bcrypt.compare(password, user.password)
     if (!match) {
-        throw Error("username or password incorrect")
+        res.cookie("flash",{type:"danger",message:"username or password incorrect"})
+        res.redirect("/user/login")
     }
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' })
     const cookieOption = {
@@ -56,6 +59,7 @@ router.post("/login", async (req, res) => {
         secure: false,
     }
     res.cookie("token", token, cookieOption)
+    res.cookie("flash",{type:"success",message:"Welcome Back"})
     res.redirect(redirect || req.query.redirect || '/')
 })
 
@@ -68,6 +72,7 @@ router.post("/logout",async(req,res)=>{
     }
     res.clearCookie("token",{httpOnly: true});
     await Blacklist.findOneAndUpdate({token},{token},{upsert:true})
+    res.cookie("flash",{type:"success",message:" Good bye ..."})
     res.redirect("/")
 })
 
@@ -105,6 +110,26 @@ router.get("/profile",checkAuth,async(req,res)=>{
     .populate('stay')
     console.log(user)
     res.render("user/profile",{user})
+})
+
+
+router.get("/wishlist",checkAuth,async(req,res)=>{
+    const userId = req.user
+    const user = await User.findById(userId).populate("wishlist")
+    const wishlist = user.wishlist
+    res.render("user/wishlist",{wishlist})
+
+})
+
+router.get("/wishlist/:id",checkAuth,async(req,res)=>{
+   await User.findByIdAndUpdate(
+    req.user,
+    {
+        $addToSet:{wishlist:req.params.id}
+    }
+   );
+   res.cookie("flash",{type:"success",message:"Added to Wishlist"})
+   res.redirect(`/stays/${req.params.id}`)
 })
 
 

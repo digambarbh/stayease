@@ -38,6 +38,7 @@ router.post("/:id", checkAuth, async (req, res) => {
     user.bookings.push(booking._id)
     await user.save()
     await booking.save()
+    res.cookie("flash",{type:"success",message:"Stay booked . Happy Journey"})
     res.redirect("/user/my/bookings")
 })
 

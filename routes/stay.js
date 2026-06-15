@@ -13,11 +13,10 @@ router.get("/", catchAsync(async (req, res) => {
     const stays = await Stay.find({})
     res.render("stay/stays", { stays })
 }))
+
 router.get('/new', checkAuth, isHost, (req, res) => {
-    console.log(req.url)
     res.render('stay/new')
 })
-
 
 router.get('/:id', catchAsync(async (req, res) => {
     const stay = await Stay.findById(req.params.id).populate("host")
@@ -67,7 +66,7 @@ router.post('/new', checkAuth, isHost, upload.array('image'), catchAsync(async (
             }
         }
     );
-
+    res.cookie("flash",{type:"success",message:"Stay Created.Start Hosting"})
     res.redirect(`/stays/${stay._id}`);
 })
 );
@@ -133,6 +132,7 @@ router.patch("/:id", checkAuth, isHost, upload.array('image'), catchAsync(async 
     }
 
     await stay.save()
+    res.cookie("flash",{type:"success",message:"Stay Updated"})
     res.redirect(`/stays/${id}`)
 }))
 
@@ -144,6 +144,7 @@ router.delete("/:id", checkAuth, isHost, catchAsync(async (req, res) => {
         return res.send("you are not owner of this stay")
     }
     await Stay.findByIdAndDelete(id)
+    res.cookie("flash",{type:"danger",message:"Stay Deleted Successfully"})
     res.redirect("/stays")
 }))
 

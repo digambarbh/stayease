@@ -1,67 +1,247 @@
 <% layout("/layouts/boilerplate.ejs") %>
-<div class="container py-5">
 
-    <!-- Profile Header -->
-    <div class="profile-header mb-5">
-        <h1>About ME</h1>
-        <div class="profile-avatar">
-            <% if(user.avatar){ %>
-                <img src="<%= user.avatar %>" alt="">
-            <% } else { %>
-               
-            <% } %>
-        </div>
+<style>
+    body {
+        background-color: #ffffff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-        <div class="profile-info">
-            <h1><%= user.username %></h1>
-            <p class="text-muted"><%= user.email %></p>
-            <p class="text-muted">Role - <%= user.role %></p>
-            <div class="member-badge">
-                StayEase Member
+    .profile-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-top: 5rem !important;
+        padding-bottom: 5rem !important;
+    }
+
+    /* Left Sidebar */
+    .profile-sidebar {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-avatar {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+        margin-bottom: 2rem;
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .sidebar-divider {
+        width: 100%;
+        height: 1px;
+        background-color: #ebebeb;
+        margin: 1.5rem 0;
+    }
+
+    .verification-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        text-align: left;
+        font-size: 1.05rem;
+        color: #222222;
+        margin-bottom: 1rem;
+        font-weight: 500;
+    }
+
+    .verification-icon {
+        font-size: 1.5rem;
+    }
+
+    /* Right Content */
+    .profile-main {
+        padding-left: 2rem;
+    }
+
+    .profile-greeting {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #222222;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-joined {
+        font-size: 1.1rem;
+        color: #717171;
+        margin-bottom: 3rem;
+    }
+
+    .about-section h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #222222;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Minimalist Stat Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+        margin-bottom: 3rem;
+    }
+
+    .stat-box {
+        border-bottom: 1px solid #ebebeb;
+        padding-bottom: 1.5rem;
+    }
+
+    .stat-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #222222;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: #717171;
+        font-weight: 400;
+    }
+
+    /* Actions */
+    .action-row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .btn-profile-primary {
+        background: #222222;
+        color: white;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .btn-profile-primary:hover {
+        background: #000000;
+        color: white;
+    }
+
+    .btn-profile-secondary {
+        background: white;
+        color: #222222;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        border: 1px solid #222222;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .btn-profile-secondary:hover {
+        background: #f8f9fa;
+        color: #222222;
+    }
+
+    @media (max-width: 768px) {
+        .profile-main {
+            padding-left: 0;
+            margin-top: 2rem;
+        }
+    }
+</style>
+
+<div class="container profile-container">
+    <div class="row">
+        <!-- Left Sidebar Column -->
+        <div class="col-lg-4 col-md-5">
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    <% if(user.avatar){ %>
+                        <img src="<%= user.avatar %>" alt="<%= user.username %>'s Avatar">
+                    <% } else { %>
+                        <span style="font-size: 6rem;">👤</span>
+                    <% } %>
+                </div>
+                
+                <h3 style="font-weight: 700; color: #222222; margin-bottom: 0.5rem;"><%= user.username %></h3>
+                <p style="color: #717171; font-size: 1rem;"><%= user.role === 'host' ? 'Superhost' : 'Guest' %></p>
+
+                <div class="sidebar-divider"></div>
+
+                <div style="width: 100%;">
+                    <h4 style="font-size: 1.2rem; font-weight: 600; color: #222222; margin-bottom: 1.5rem; text-align: left;"><%= user.username %>'s confirmed information</h4>
+                    
+                    <div class="verification-item">
+                        <span class="verification-icon">✔️</span>
+                        <span>Identity</span>
+                    </div>
+                    <div class="verification-item">
+                        <span class="verification-icon">✔️</span>
+                        <span>Email address</span>
+                    </div>
+                    <div class="verification-item">
+                        <span class="verification-icon">✔️</span>
+                        <span>Phone number</span>
+                    </div>
+                </div>
             </div>
-
-            <small>
-                Joined
-                <%= new Date(user.createdAt).toLocaleDateString() %>
-            </small>
         </div>
 
-    </div>
+        <!-- Right Content Column -->
+        <div class="col-lg-8 col-md-7">
+            <div class="profile-main">
+                <h1 class="profile-greeting">Hi, I'm <%= user.username %></h1>
+                <p class="profile-joined">Joined in <%= new Date(user.createdAt).getFullYear() %> · <%= user.email %></p>
 
-    <!-- Stats -->
-    <div class="row g-4 mb-5">
+                <div class="about-section">
+                    <h2>About</h2>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-value"><%= user.bookings ? user.bookings.length : 0 %></div>
+                            <div class="stat-label">Trips taken</div>
+                        </div>
+                        <% if (user.role == "host") { %>
+                            <div class="stat-box">
+                                <div class="stat-value">⭐</div>
+                                <div class="stat-label">Verified Host</div>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
 
-        <div class="col-md-4">
-            <div class="stat-card">
-               <div class="fw-bold "><h2><%= user.bookings.length %></h2></div>
-                <p>Bookings</p>
+                <div class="sidebar-divider" style="margin: 3rem 0;"></div>
+
+                <div class="about-section">
+                    <h2>Manage your account</h2>
+                    <div class="action-row mt-4">
+                        <a href="/user/my/bookings" class="btn-profile-primary">
+                            View My Trips
+                        </a>
+                        <% if (user.role == "host") { %>
+                            <a href="/stays/new" class="btn-profile-secondary">
+                                Host a New Stay
+                            </a>
+                        <% } %>
+                    </div>
+                </div>
             </div>
         </div>
-
-        
-
     </div>
-
-    <!-- Actions -->
-
-    <div class="action-section mb-5">
-        <a href="/bookings" class="btn btn-dark">
-            My Trips
-        </a>
-
-        <% if (user.role=="host") { %>
-            <a href="/stays/new" class="btn btn-outline-dark">
-            Host a Stay
-        </a>
-        <% } %>
-    </div>
-
-    <!-- Recent Bookings
-
-   
-
-    <!-- Hosted Properties -->
-
-    
-
 </div>

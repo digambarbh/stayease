@@ -1,92 +1,572 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
-<section class="py-5">
-  <div class="container">
-    <div class="row align-items-center gy-4">
-      <div class="col-lg-6">
-        <span class="badge rounded-pill bg-danger px-3 py-2 mb-3">StayEase · Book smarter</span>
-        <h1 class="display-5 fw-bold">Find relaxing stays, comfortable homes, and local experiences across India.</h1>
-        <p class="lead text-muted my-4">Search verified hotels, cozy homestays, and modern villas with instant booking, secure payments, and 24/7 guest support.</p>
-        <div class="d-flex flex-column flex-sm-row gap-3">
-          <a href="/stays" class="btn btn-primary btn-lg">Browse stays</a>
-          <a href="/user/register" class="btn btn-outline-secondary btn-lg">Create an account</a>
-        </div>
-      </div>
-      <div class="col-lg-6 text-center">
-        <div class="border rounded-4 p-4 bg-white shadow-sm">
-          <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80" alt="StayEase hero" class="img-fluid rounded-4">
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<style>
+    body {
+        background-color: #ffffff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-<section class="py-5 bg-light">
-  <div class="container">
-    <div class="row text-center mb-5">
-      <div class="col-lg-8 mx-auto">
-        <h2 class="fw-bold">Travel plans made easy</h2>
-        <p class="text-muted">Choose from a wide variety of properties, book with confidence, and manage your reservations from one place.</p>
-      </div>
+    /* Hero Section with Search Bar */
+    .hero-container {
+        position: relative;
+        padding-top: 2rem;
+        padding-bottom: 8rem; /* space for overlapping search bar */
+    }
+
+    .hero-image-wrapper {
+        position: relative;
+        width: 100%;
+        height: 60vh;
+        min-height: 400px;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .hero-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 100%);
+    }
+
+    .hero-text {
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        transform: translateY(-50%);
+        color: white;
+        max-width: 500px;
+    }
+
+    .hero-text h1 {
+        font-size: clamp(3rem, 6vw, 4.5rem);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        margin-bottom: 1rem;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Floating Search Bar */
+    .search-bar-wrapper {
+        position: absolute;
+        bottom: 4rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 850px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 100px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.5);
+        display: flex;
+        align-items: center;
+        padding: 8px 8px 8px 32px;
+        z-index: 10;
+    }
+
+    .search-input-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid rgba(0,0,0,0.08);
+        padding-right: 16px;
+        margin-right: 16px;
+        cursor: pointer;
+    }
+
+    .search-input-group:last-of-type {
+        border-right: none;
+    }
+
+    .search-label {
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: #222222;
+        margin-bottom: 2px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .search-input {
+        border: none;
+        padding: 0;
+        font-size: 0.95rem;
+        color: #717171;
+        background: transparent;
+        outline: none;
+        cursor: pointer;
+        font-family: inherit;
+    }
+
+    .search-input::placeholder {
+        color: #717171;
+    }
+
+    /* Beautiful Date Picker Styling */
+    .date-input {
+        color: #222222;
+        font-weight: 500;
+    }
+
+    .date-input::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        opacity: 0.6;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        padding: 4px;
+        filter: invert(1);
+        background-color: #222222;
+        border-radius: 50%;
+    }
+
+    .date-input::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    .search-btn {
+        background: linear-gradient(135deg, #FF385C 0%, #E61E4D 50%, #D70466 100%);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 14px 32px;
+        font-weight: 700;
+        font-size: 1.05rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(227, 28, 95, 0.3);
+    }
+
+    .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(227, 28, 95, 0.4);
+        color: white;
+    }
+
+    /* Categories Row */
+    .categories-row {
+        display: flex;
+        gap: 32px;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+        margin-bottom: 5rem;
+        scrollbar-width: none;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .categories-row::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        min-width: max-content;
+        opacity: 0.65;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        padding-bottom: 12px;
+        border-bottom: 2px solid transparent;
+    }
+
+    .category-item:hover {
+        opacity: 1;
+        border-bottom: 2px solid #222222;
+        transform: scale(1.02);
+    }
+
+    .category-icon {
+        font-size: 1.8rem;
+        opacity: 0.85;
+    }
+
+    .category-text {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #222222;
+    }
+
+    /* Featured Section */
+    .section-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #222222;
+        margin-bottom: 2.5rem;
+        letter-spacing: -0.03em;
+    }
+
+    .feature-card {
+        border-radius: 24px;
+        overflow: hidden;
+        position: relative;
+        height: 450px;
+        cursor: pointer;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    }
+
+    .feature-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .feature-card:hover img {
+        transform: scale(1.06);
+    }
+
+    .feature-card-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 40px 32px 32px 32px;
+        background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 60%, transparent 100%);
+        color: white;
+    }
+
+    .feature-card-content h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+    }
+
+    .feature-card-content p {
+        font-size: 1.05rem;
+        opacity: 0.95;
+        margin: 0;
+        font-weight: 400;
+    }
+
+    /* Premium Airbnb Stay Cards (from stays.ejs) */
+    .stay-card {
+        border: none !important;
+        border-radius: 0 !important;
+        overflow: visible;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        transition: none !important;
+        position: relative;
+    }
+    .stay-card:hover {
+        transform: none !important;
+        box-shadow: none !important;
+        border-color: transparent !important;
+    }
+    .card-img-top {
+        border-radius: 12px !important;
+        height: 280px !important;
+        object-fit: cover;
+        margin-bottom: 12px;
+        transition: none !important;
+    }
+    .stay-card:hover .card-img-top {
+        transform: none !important;
+    }
+    .stay-card .card-body {
+        padding: 0 !important;
+    }
+    .stay-card .d-flex.justify-content-between.align-items-start.mb-2 {
+        margin-bottom: 0 !important;
+    }
+    .stay-card h5.fw-bold {
+        color: #222222;
+        font-size: 1rem;
+        font-weight: 600 !important;
+        line-height: 1.2;
+        margin-bottom: 2px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80%;
+    }
+    .stay-card p.text-muted {
+        font-size: 0.95rem;
+        font-weight: 400;
+        color: #717171 !important;
+        margin-bottom: 2px !important;
+    }
+    .stay-card .text-secondary.small {
+        font-size: 0.95rem;
+        color: #717171 !important;
+        margin-bottom: 2px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2;
+    }
+    .stay-card .d-flex.justify-content-between.mb-3 {
+        border-top: none;
+        padding-top: 0;
+        margin-bottom: 8px !important;
+        justify-content: flex-start !important;
+        gap: 8px;
+    }
+    .stay-card .badge {
+        font-size: 0.95rem;
+        padding: 0;
+        font-weight: 400;
+        border-radius: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        color: #717171 !important;
+        letter-spacing: 0;
+    }
+    .stay-card .badge::after {
+        content: " • ";
+        margin-left: 8px;
+        color: #717171;
+    }
+    .stay-card .d-flex.mb-3 .text-muted.small {
+        font-size: 0.95rem;
+        font-weight: 400;
+        color: #717171 !important;
+    }
+    .stay-card .d-flex.justify-content-between.align-items-center {
+        justify-content: flex-start !important;
+        margin-top: 4px;
+    }
+    .stay-card span.fw-bold.fs-5 {
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        color: #222222;
+        letter-spacing: 0;
+    }
+    .stay-card .align-items-center .text-muted.small {
+        font-size: 1rem !important;
+        color: #222222 !important;
+        font-weight: 400 !important;
+        margin-left: 4px;
+    }
+    .stay-card .card-body .btn-dark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        z-index: 10;
+        cursor: pointer;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+    }
+
+    @media (max-width: 768px) {
+        .hero-container {
+            padding-top: 1rem;
+            padding-bottom: 2rem;
+        }
+        .hero-image-wrapper {
+            height: 50vh;
+            min-height: 350px;
+            border-radius: 16px;
+        }
+        .hero-text {
+            text-align: center;
+            left: 5%;
+            right: 5%;
+        }
+        .hero-text h1 {
+            font-size: 2.2rem;
+        }
+        .search-bar-wrapper {
+            position: relative;
+            bottom: auto;
+            left: auto;
+            transform: none;
+            width: 92%;
+            margin: -4rem auto 2rem auto;
+            flex-direction: column;
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .search-input-group {
+            border-right: none;
+            border-bottom: 1px solid #ebebeb;
+            margin-right: 0;
+            padding-right: 0;
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+        .search-input-group:nth-of-type(4) {
+            border-bottom: none !important;
+            padding-bottom: 0;
+            margin-bottom: 16px;
+        }
+        .search-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 14px;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .feature-card {
+            height: 320px;
+        }
+        .featured-grid > div {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+</style>
+
+<div class="container hero-container">
+    <div class="hero-image-wrapper">
+        <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=2000&q=80" alt="Breathtaking luxury resort">
+        <div class="hero-overlay"></div>
+        <div class="hero-text">
+            <h1>Not sure where to go? Perfect.</h1>
+        </div>
     </div>
+
+    <!-- The Airbnb-style floating search bar -->
+    <div class="search-bar-wrapper">
+        <div class="search-input-group">
+            <span class="search-label">Location</span>
+            <input type="text" class="search-input" placeholder="Where are you going?">
+        </div>
+        <div class="search-input-group">
+            <span class="search-label">Check in</span>
+            <input type="text" class="search-input date-input" placeholder="Add dates" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'">
+        </div>
+        <div class="search-input-group">
+            <span class="search-label">Check out</span>
+            <input type="text" class="search-input date-input" placeholder="Add dates" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'">
+        </div>
+        <div class="search-input-group">
+            <span class="search-label">Guests</span>
+            <input type="text" class="search-input" placeholder="Add guests">
+        </div>
+        <a href="/stays" class="search-btn">
+            🔍 Search
+        </a>
+    </div>
+</div>
+
+<div class="container mb-5 pb-4">
+    <h2 class="section-title">Featured Stays</h2>
+    <div class="row g-4 featured-grid">
+        <% for(let stay of stays.slice(0, 4)) { %>
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 stay-card">
+                        <!-- Image -->
+                        <img src="<%= (stay.images && stay.images[0]) ? stay.images[0].url : 'https://via.placeholder.com/800x600?text=No+image' %>"
+                            class="card-img-top" alt="stay image" style="object-fit: cover;">
+                        
+                        <!-- Card Body -->
+                        <div class="card-body d-flex flex-column">
+                            
+                            <!-- Top -->
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="fw-bold mb-0">
+                                    <%= stay.name %>
+                                </h5>
+                                <% if(stay.isAvailable) { %>
+                                    <span class="badge bg-success rounded-pill">Available</span>
+                                <% } else { %>
+                                    <span class="badge bg-danger rounded-pill">Booked</span>
+                                <% } %>
+                            </div>
+
+                            <!-- Location -->
+                            <p class="text-muted mb-2">
+                                📍 <%= stay.location %>
+                            </p>
+
+                            <!-- Description -->
+                            <p class="text-secondary small flex-grow-1">
+                                <%= stay.description ? stay.description.substring(0, 90) + '...' : '' %>
+                            </p>
+
+                            <!-- Type & Capacity -->
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-light text-dark border">
+                                    <%= stay.type || 'Villa' %>
+                                </span>
+                                <span class="text-muted small">
+                                    👥 <%= stay.capacity || 2 %> Guests
+                                </span>
+                            </div>
+
+                            <!-- Bottom -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="fw-bold fs-5">
+                                        ₹<%= stay.price %>
+                                    </span>
+                                    <span class="text-muted small">
+                                        / night
+                                    </span>
+                                </div>
+                                <a href="/stays/<%= stay._id %>" class="btn btn-dark rounded-pill px-4">
+                                    View
+                                </a>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<div class="container mb-5 pb-5">
+    <h2 class="section-title">Popular Destinations</h2>
     <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="mb-3 display-6 text-danger">🏨</div>
-            <h5 class="card-title fw-bold">Verified stays</h5>
-            <p class="card-text text-muted">All of our listings are reviewed so you can book with confidence.</p>
-          </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="feature-card">
+                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="Modern Villas">
+                <div class="feature-card-content">
+                    <h3>Modern Villas</h3>
+                    <p>Experience peak luxury and privacy.</p>
+                </div>
+                <a href="/stays" style="position: absolute; inset: 0;"></a>
+            </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="mb-3 display-6 text-danger">⚡</div>
-            <h5 class="card-title fw-bold">Fast booking</h5>
-            <p class="card-text text-muted">Reserve stays quickly with easy checkout and secure payment support.</p>
-          </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="feature-card">
+                <img src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=800&q=80" alt="Tropical Escapes">
+                <div class="feature-card-content">
+                    <h3>Tropical Escapes</h3>
+                    <p>Unwind with breathtaking ocean views.</p>
+                </div>
+                <a href="/stays" style="position: absolute; inset: 0;"></a>
+            </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="mb-3 display-6 text-danger">💬</div>
-            <h5 class="card-title fw-bold">Support anytime</h5>
-            <p class="card-text text-muted">Need help? Our guest support team is available when you need it.</p>
-          </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="feature-card">
+                <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80" alt="Resort Stays">
+                <div class="feature-card-content">
+                    <h3>Resort Stays</h3>
+                    <p>World-class amenities and service.</p>
+                </div>
+                <a href="/stays" style="position: absolute; inset: 0;"></a>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</section>
-
-<section class="py-5">
-  <div class="container">
-    <div class="row align-items-center gy-4">
-      <div class="col-lg-6 order-lg-2">
-        <h2 class="fw-bold">Discover stays for every trip</h2>
-        <p class="text-muted">From weekend getaways to extended stays, find the right place with transparent pricing and real availability.</p>
-        <ul class="list-unstyled text-dark fw-semibold">
-          <li class="mb-3">✔️ Hotels near top attractions</li>
-          <li class="mb-3">✔️ Family-friendly homestays</li>
-          <li class="mb-3">✔️ Comfortable villas for groups</li>
-        </ul>
-        <a href="/stays" class="btn btn-outline-primary btn-lg">Explore stays</a>
-      </div>
-      <div class="col-lg-6 order-lg-1">
-        <div class="row g-3">
-          <div class="col-6">
-            <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=600&q=80" alt="Cozy room" class="img-fluid rounded-4 shadow-sm">
-          </div>
-          <div class="col-6">
-            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="City stay" class="img-fluid rounded-4 shadow-sm">
-          </div>
-          <div class="col-12 mt-3">
-            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80" alt="Sunset stay" class="img-fluid rounded-4 shadow-sm">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+</div>

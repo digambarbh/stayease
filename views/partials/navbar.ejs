@@ -11,11 +11,16 @@
     --se-surface: #F7F7F7;
     --se-white: #FFFFFF;
     --se-radius: 40px;
-    --se-shadow: 0 2px 16px rgba(0,0,0,0.10);
-    --se-shadow-lg: 0 8px 32px rgba(0,0,0,0.16);
+    --se-shadow: 0 2px 16px rgba(0, 0, 0, 0.10);
+    --se-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
   }
 
-  * { font-family: 'Inter', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+  * {
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
   .se-navbar {
     background: var(--se-white);
@@ -44,14 +49,21 @@
     gap: 6px;
     flex-shrink: 0;
   }
-  .se-logo svg { color: var(--se-brand); }
+
+  .se-logo svg {
+    color: var(--se-brand);
+  }
+
   .se-logo-text {
     font-size: 1.45rem;
     font-weight: 700;
     color: var(--se-dark);
     letter-spacing: -0.5px;
   }
-  .se-logo-text span { color: var(--se-brand); }
+
+  .se-logo-text span {
+    color: var(--se-brand);
+  }
 
   /* ── Filter toggle button ── */
   .se-filter-toggle {
@@ -70,8 +82,18 @@
     flex-shrink: 0;
     white-space: nowrap;
   }
-  .se-filter-toggle:hover { background: var(--se-surface); border-color: #bbb; }
-  .se-filter-toggle.active { border-color: var(--se-dark); background: var(--se-dark); color: var(--se-white); }
+
+  .se-filter-toggle:hover {
+    background: var(--se-surface);
+    border-color: #bbb;
+  }
+
+  .se-filter-toggle.active {
+    border-color: var(--se-dark);
+    background: var(--se-dark);
+    color: var(--se-white);
+  }
+
   .se-filter-badge {
     background: var(--se-brand);
     color: #fff;
@@ -84,7 +106,10 @@
     align-items: center;
     justify-content: center;
   }
-  .se-filter-badge.show { display: flex; }
+
+  .se-filter-badge.show {
+    display: flex;
+  }
 
   /* ── Right Actions ── */
   .se-actions {
@@ -93,6 +118,7 @@
     gap: 6px;
     flex-shrink: 0;
   }
+
   .se-nav-link {
     display: flex;
     align-items: center;
@@ -106,10 +132,16 @@
     transition: background 0.15s;
     white-space: nowrap;
   }
-  .se-nav-link:hover { background: var(--se-surface); }
+
+  .se-nav-link:hover {
+    background: var(--se-surface);
+  }
 
   /* Stays dropdown */
-  .se-dropdown { position: relative; }
+  .se-dropdown {
+    position: relative;
+  }
+
   .se-dropdown-trigger {
     display: flex;
     align-items: center;
@@ -125,10 +157,19 @@
     transition: background 0.15s;
     white-space: nowrap;
   }
-  .se-dropdown-trigger:hover { background: var(--se-surface); }
-  .se-chevron { transition: transform 0.2s; }
+
+  .se-dropdown-trigger:hover {
+    background: var(--se-surface);
+  }
+
+  .se-chevron {
+    transition: transform 0.2s;
+  }
+
   .se-dropdown:hover .se-chevron,
-  .se-dropdown:focus-within .se-chevron { transform: rotate(180deg); }
+  .se-dropdown:focus-within .se-chevron {
+    transform: rotate(180deg);
+  }
 
   .se-dropdown-menu {
     position: absolute;
@@ -146,12 +187,14 @@
     transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
     z-index: 300;
   }
+
   .se-dropdown:hover .se-dropdown-menu,
   .se-dropdown:focus-within .se-dropdown-menu {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
   }
+
   .se-dropdown-item {
     display: flex;
     align-items: center;
@@ -164,8 +207,15 @@
     text-decoration: none;
     transition: background 0.13s;
   }
-  .se-dropdown-item:hover { background: var(--se-surface); }
-  .se-dropdown-item svg { color: var(--se-muted); flex-shrink: 0; }
+
+  .se-dropdown-item:hover {
+    background: var(--se-surface);
+  }
+
+  .se-dropdown-item svg {
+    color: var(--se-muted);
+    flex-shrink: 0;
+  }
 
   /* Auth buttons */
   .se-btn-outline {
@@ -181,7 +231,11 @@
     transition: background 0.15s, border-color 0.15s;
     white-space: nowrap;
   }
-  .se-btn-outline:hover { background: var(--se-surface); border-color: #bbb; }
+
+  .se-btn-outline:hover {
+    background: var(--se-surface);
+    border-color: #bbb;
+  }
 
   .se-btn-primary {
     padding: 9px 20px;
@@ -196,10 +250,17 @@
     transition: background 0.15s, transform 0.12s;
     white-space: nowrap;
   }
-  .se-btn-primary:hover { background: var(--se-brand-dark); color: #fff; }
+
+  .se-btn-primary:hover {
+    background: var(--se-brand-dark);
+    color: #fff;
+  }
 
   /* User pill */
-  .se-user-dropdown { position: relative; }
+  .se-user-dropdown {
+    position: relative;
+  }
+
   .se-user-pill {
     display: flex;
     align-items: center;
@@ -215,7 +276,11 @@
     font-size: 0.82rem;
     font-weight: 600;
   }
-  .se-user-pill:hover { box-shadow: var(--se-shadow); }
+
+  .se-user-pill:hover {
+    box-shadow: var(--se-shadow);
+  }
+
   .se-avatar {
     width: 30px;
     height: 30px;
@@ -227,6 +292,7 @@
     justify-content: center;
     flex-shrink: 0;
   }
+
   .se-user-dropdown-menu {
     position: absolute;
     top: calc(100% + 8px);
@@ -243,12 +309,14 @@
     transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
     z-index: 300;
   }
+
   .se-user-dropdown:hover .se-user-dropdown-menu,
   .se-user-dropdown:focus-within .se-user-dropdown-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
   }
+
   .se-user-item {
     display: flex;
     align-items: center;
@@ -266,10 +334,25 @@
     text-align: left;
     transition: background 0.13s;
   }
-  .se-user-item:hover { background: var(--se-surface); }
-  .se-user-item.logout { color: var(--se-brand); font-weight: 600; }
-  .se-user-item.logout:hover { background: #fff0f2; }
-  .se-sep { height: 1px; background: var(--se-border); margin: 6px 0; }
+
+  .se-user-item:hover {
+    background: var(--se-surface);
+  }
+
+  .se-user-item.logout {
+    color: var(--se-brand);
+    font-weight: 600;
+  }
+
+  .se-user-item.logout:hover {
+    background: #fff0f2;
+  }
+
+  .se-sep {
+    height: 1px;
+    background: var(--se-border);
+    margin: 6px 0;
+  }
 
   /* ── Filter Panel ── */
   .se-filter-panel {
@@ -278,24 +361,33 @@
     padding: 0;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s;
   }
+
   .se-filter-panel.open {
     max-height: 420px;
     padding: 20px 0 24px;
   }
+
   .se-filter-inner {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 24px;
   }
+
   .se-filter-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     gap: 16px;
     margin-bottom: 20px;
   }
-  .se-filter-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .se-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
   .se-filter-label {
     font-size: 0.72rem;
     font-weight: 700;
@@ -303,6 +395,7 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
+
   .se-filter-select,
   .se-filter-input {
     padding: 9px 12px;
@@ -317,9 +410,16 @@
     appearance: none;
     -webkit-appearance: none;
   }
+
   .se-filter-select:focus,
-  .se-filter-input:focus { border-color: var(--se-dark); }
-  .se-filter-select-wrap { position: relative; }
+  .se-filter-input:focus {
+    border-color: var(--se-dark);
+  }
+
+  .se-filter-select-wrap {
+    position: relative;
+  }
+
   .se-filter-select-wrap svg {
     position: absolute;
     right: 10px;
@@ -328,10 +428,20 @@
     pointer-events: none;
     color: var(--se-muted);
   }
-  .se-filter-select { width: 100%; padding-right: 30px; cursor: pointer; }
+
+  .se-filter-select {
+    width: 100%;
+    padding-right: 30px;
+    cursor: pointer;
+  }
 
   /* Price Range */
-  .se-price-range { display: flex; align-items: center; gap: 8px; }
+  .se-price-range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   .se-price-input {
     flex: 1;
     padding: 9px 10px;
@@ -345,11 +455,24 @@
     transition: border-color 0.15s;
     min-width: 0;
   }
-  .se-price-input:focus { border-color: var(--se-dark); }
-  .se-price-dash { color: var(--se-muted); font-size: 0.85rem; flex-shrink: 0; }
+
+  .se-price-input:focus {
+    border-color: var(--se-dark);
+  }
+
+  .se-price-dash {
+    color: var(--se-muted);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
 
   /* Amenity chips */
-  .se-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .se-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
   .se-chip {
     padding: 5px 12px;
     border: 1.5px solid var(--se-border);
@@ -364,8 +487,17 @@
     align-items: center;
     gap: 5px;
   }
-  .se-chip:hover { border-color: var(--se-dark); color: var(--se-dark); }
-  .se-chip.selected { border-color: var(--se-dark); background: var(--se-dark); color: #fff; }
+
+  .se-chip:hover {
+    border-color: var(--se-dark);
+    color: var(--se-dark);
+  }
+
+  .se-chip.selected {
+    border-color: var(--se-dark);
+    background: var(--se-dark);
+    color: #fff;
+  }
 
   /* Filter footer */
   .se-filter-footer {
@@ -377,7 +509,14 @@
     gap: 12px;
     flex-wrap: wrap;
   }
-  .se-filter-active-tags { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+
+  .se-filter-active-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
   .se-active-tag {
     display: flex;
     align-items: center;
@@ -390,6 +529,7 @@
     font-weight: 600;
     color: var(--se-brand);
   }
+
   .se-active-tag button {
     background: none;
     border: none;
@@ -401,7 +541,12 @@
     line-height: 1;
     font-size: 12px;
   }
-  .se-filter-actions { display: flex; gap: 8px; }
+
+  .se-filter-actions {
+    display: flex;
+    gap: 8px;
+  }
+
   .se-btn-clear {
     padding: 8px 16px;
     border: 1.5px solid var(--se-border);
@@ -414,7 +559,12 @@
     transition: all 0.15s;
     white-space: nowrap;
   }
-  .se-btn-clear:hover { border-color: var(--se-dark); color: var(--se-dark); }
+
+  .se-btn-clear:hover {
+    border-color: var(--se-dark);
+    color: var(--se-dark);
+  }
+
   .se-btn-apply {
     padding: 8px 20px;
     background: var(--se-brand);
@@ -427,7 +577,10 @@
     transition: background 0.15s;
     white-space: nowrap;
   }
-  .se-btn-apply:hover { background: var(--se-brand-dark); }
+
+  .se-btn-apply:hover {
+    background: var(--se-brand-dark);
+  }
 
   /* ── Mobile Toggle ── */
   .se-mobile-toggle {
@@ -444,15 +597,29 @@
     font-weight: 600;
   }
 
-  /* ── Mobile Drawer ── */
+  /* ── Mobile Drawer (Enhanced animations & padding) ── */
   .se-mobile-drawer {
     display: none;
     background: var(--se-white);
-    border-top: 1px solid var(--se-border);
-    padding: 16px;
+    padding: 0 16px;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, padding 0.3s ease;
+    border-top: 1px solid transparent;
   }
+
+  .se-mobile-drawer.open {
+    display: flex;
+    max-height: 800px;
+    opacity: 1;
+    padding: 16px;
+    border-top: 1px solid var(--se-border);
+    box-shadow: inset 0 10px 15px -10px rgba(0,0,0,0.05);
+  }
+
   .se-drawer-link {
     display: flex;
     align-items: center;
@@ -465,14 +632,41 @@
     text-decoration: none;
     transition: background 0.13s;
   }
-  .se-drawer-link:hover { background: var(--se-surface); }
-  .se-drawer-link svg { color: var(--se-muted); }
-  .se-drawer-link.highlight { color: var(--se-brand); }
-  .se-drawer-link.highlight svg { color: var(--se-brand); }
-  .se-drawer-sep { height: 1px; background: var(--se-border); margin: 6px 0; }
-  .se-drawer-auth { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+
+  .se-drawer-link:hover {
+    background: var(--se-surface);
+  }
+
+  .se-drawer-link svg {
+    color: var(--se-muted);
+  }
+
+  .se-drawer-link.highlight {
+    color: var(--se-brand);
+  }
+
+  .se-drawer-link.highlight svg {
+    color: var(--se-brand);
+  }
+
+  .se-drawer-sep {
+    height: 1px;
+    background: var(--se-border);
+    margin: 6px 0;
+  }
+
+  .se-drawer-auth {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
   .se-drawer-auth .se-btn-outline,
-  .se-drawer-auth .se-btn-primary { text-align: center; display: block; }
+  .se-drawer-auth .se-btn-primary {
+    text-align: center;
+    display: block;
+  }
 
   /* Mobile filter section */
   .se-mobile-filter-toggle {
@@ -491,25 +685,47 @@
     margin-bottom: 4px;
     transition: background 0.15s;
   }
-  .se-mobile-filter-toggle:hover { background: var(--se-surface); }
+
+  .se-mobile-filter-toggle:hover {
+    background: var(--se-surface);
+  }
+
   .se-mobile-filter-body {
     display: none;
     flex-direction: column;
     gap: 14px;
     padding: 0 4px 8px;
   }
-  .se-mobile-filter-body.open { display: flex; }
+
+  .se-mobile-filter-body.open {
+    display: flex;
+  }
 
   /* ── Responsive ── */
   @media (max-width: 768px) {
-    .se-actions, .se-filter-toggle { display: none !important; }
-    .se-mobile-toggle { display: flex; }
-    .se-mobile-drawer.open { display: flex; }
-    .se-filter-panel { display: none; }
+
+    .se-actions,
+    .se-filter-toggle {
+      display: none !important;
+    }
+
+    .se-mobile-toggle {
+      display: flex;
+    }
+
+    .se-mobile-drawer.open {
+      display: flex;
+    }
+
+    .se-filter-panel {
+      display: none;
+    }
   }
+
   @media (max-width: 400px) {
-    .se-logo-text { font-size: 1.25rem; }
-    .se-nav-top { padding: 0 14px; }
+    .se-logo-text {
+      font-size: 1.25rem;
+    }
   }
 </style>
 
@@ -521,7 +737,8 @@
     <!-- Logo -->
     <a class="se-logo" href="/">
       <svg width="24" height="24" viewBox="0 0 32 32" fill="currentColor">
-        <path d="M16 2C10.48 2 6 6.48 6 12c0 7.5 10 18 10 18s10-10.5 10-18c0-5.52-4.48-10-10-10zm0 13.5c-1.93 0-3.5-1.57-3.5-3.5S14.07 8.5 16 8.5s3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+        <path
+          d="M16 2C10.48 2 6 6.48 6 12c0 7.5 10 18 10 18s10-10.5 10-18c0-5.52-4.48-10-10-10zm0 13.5c-1.93 0-3.5-1.57-3.5-3.5S14.07 8.5 16 8.5s3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
       </svg>
       <span class="se-logo-text">Stay<span>Ease</span></span>
     </a>
@@ -531,7 +748,9 @@
 
       <button class="se-filter-toggle" id="seFilterToggle" type="button" aria-label="Filters">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-          <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+          <line x1="4" y1="6" x2="20" y2="6" />
+          <line x1="8" y1="12" x2="16" y2="12" />
+          <line x1="11" y1="18" x2="13" y2="18" />
         </svg>
         Filters
         <span class="se-filter-badge" id="seFilterBadge">0</span>
@@ -540,106 +759,162 @@
       <div class="se-actions">
 
         <a href="/" class="se-nav-link">
-          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg>
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path d="M3 12L12 3l9 9" />
+            <path d="M9 21V12h6v9" />
+          </svg>
           Home
         </a>
 
         <!-- All Stays dropdown -->
         <div class="se-dropdown">
           <button class="se-dropdown-trigger" type="button">
-            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
             All Stays
-            <svg class="se-chevron" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <svg class="se-chevron" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"
+              viewBox="0 0 24 24">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
           </button>
           <div class="se-dropdown-menu">
             <a href="/stays" class="se-dropdown-item">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M3 12L12 3l9 9" />
+                <path d="M9 21V12h6v9" />
+              </svg>
               Browse All
             </a>
             <a href="/stays?type=villa" class="se-dropdown-item">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="2" y="7" width="20" height="14" rx="2" />
+                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+              </svg>
               Villas
             </a>
             <a href="/stays?type=apartment" class="se-dropdown-item">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22V12h6v10"/></svg>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="4" y="2" width="16" height="20" rx="1" />
+                <path d="M9 22V12h6v10" />
+              </svg>
               Apartments
             </a>
             <a href="/stays?type=cabin" class="se-dropdown-item">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9.5z"/></svg>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9.5z" />
+              </svg>
               Cabins
             </a>
             <a href="/stays?type=farmhouse" class="se-dropdown-item">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5" />
+                <path d="M2 12l10 5 10-5" />
+              </svg>
               Farmhouses
             </a>
           </div>
         </div>
 
-        <% if (Role=="host") { %>
-         <a href="/stays/new" class="se-nav-link">
-          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-          Create Stay
-        </a>
-        <% } %>
-        <a href="/wishlist" class="se-nav-link">
-          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          Wishlist
-        </a>
+        <% if (Role=="host" ) { %>
+          <a href="/stays/new" class="se-nav-link">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v8M8 12h8" />
+            </svg>
+            Create Stay
+          </a>
+          <% } %>
+            <a href="/user/wishlist" class="se-nav-link">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+              Wishlist
+            </a>
 
-        <% if (!isLoggedIn) { %>
+            <% if (!isLoggedIn) { %>
 
-          <a href="/user/register" class="se-btn-outline">Register</a>
-          <a href="/user/login" class="se-btn-primary">Login</a>
+              <a href="/user/register" class="se-btn-outline">Register</a>
+              <a href="/user/login" class="se-btn-primary">Login</a>
 
-        <% } else { %>
+              <% } else { %>
 
-          <div class="se-user-dropdown">
-            <div class="se-user-pill" tabindex="0">
-              My Account
-              <div class="se-avatar">
-                <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-              </div>
-            </div>
-            <div class="se-user-dropdown-menu">
-              <a href="/user/profile" class="se-user-item">
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                Profile
-              </a>
-              <a href="/user/my/bookings" class="se-user-item">
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                My Bookings
-              </a>
-              <a href="/wishlist" class="se-user-item">
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                Wishlist
-              </a>
-              <% if (Role=="host") { %>
-              <a href="/stays/new" class="se-user-item">
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-                Create Stay
-              </a>
-              <% } %>
-              <div class="se-sep"></div>
-              <form action="/user/logout" method="post">
-                <button type="submit" class="se-user-item logout">
-                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                  Logout
-                </button>
-              </form>
-            </div>
-          </div>
+                <div class="se-user-dropdown">
+                  <div class="se-user-pill" tabindex="0">
+                    My Account
+                    <div class="se-avatar">
+                      <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                          d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="se-user-dropdown-menu">
+                    <a href="/user/profile" class="se-user-item">
+                      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                      </svg>
+                      Profile
+                    </a>
+                    <a href="/user/my/bookings" class="se-user-item">
+                      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <path d="M16 2v4M8 2v4M3 10h18" />
+                      </svg>
+                      My Bookings
+                    </a>
+                    <a href="/user/wishlist" class="se-user-item">
+                      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path
+                          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      </svg>
+                      Wishlist
+                    </a>
+                    <% if (Role=="host" ) { %>
+                      <a href="/stays/new" class="se-user-item">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                          viewBox="0 0 24 24">
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M12 8v8M8 12h8" />
+                        </svg>
+                        Create Stay
+                      </a>
+                      <% } %>
+                        <div class="se-sep"></div>
+                        <form action="/user/logout" method="post">
+                          <button type="submit" class="se-user-item logout">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                              viewBox="0 0 24 24">
+                              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                              <polyline points="16 17 21 12 16 7" />
+                              <line x1="21" y1="12" x2="9" y2="12" />
+                            </svg>
+                            Logout
+                          </button>
+                        </form>
+                  </div>
+                </div>
 
-        <% } %>
+                <% } %>
 
       </div><!-- /.se-actions -->
     </div>
 
     <!-- Mobile Toggle -->
     <button class="se-mobile-toggle" id="seToggle" type="button" aria-label="Menu">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <path d="M3 12h18M3 6h18M3 18h18"/>
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path d="M3 12h18M3 6h18M3 18h18" />
       </svg>
-      Menu
+      <span style="font-weight: 700;">Menu</span>
     </button>
 
   </div><!-- /.se-nav-top -->
@@ -663,16 +938,20 @@
                 <option value="cottage">Cottage</option>
                 <option value="resort">Resort</option>
               </select>
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
             </div>
           </div>
 
           <div class="se-filter-group">
             <span class="se-filter-label">Price per night (₹)</span>
             <div class="se-price-range">
-              <input class="se-price-input" type="number" name="minPrice" placeholder="Min" min="0" id="filterMinPrice" />
+              <input class="se-price-input" type="number" name="minPrice" placeholder="Min" min="0"
+                id="filterMinPrice" />
               <span class="se-price-dash">–</span>
-              <input class="se-price-input" type="number" name="maxPrice" placeholder="Max" min="0" id="filterMaxPrice" />
+              <input class="se-price-input" type="number" name="maxPrice" placeholder="Max" min="0"
+                id="filterMaxPrice" />
             </div>
           </div>
 
@@ -687,7 +966,9 @@
                 <option value="4">4+</option>
                 <option value="5">5+</option>
               </select>
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
             </div>
           </div>
 
@@ -701,7 +982,9 @@
                 <option value="rating">Top rated</option>
                 <option value="newest">Newest listings</option>
               </select>
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
             </div>
           </div>
 
@@ -714,7 +997,9 @@
                 <option value="4">4+ ★</option>
                 <option value="4.5">4.5+ ★</option>
               </select>
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
             </div>
           </div>
 
@@ -725,35 +1010,65 @@
           <span class="se-filter-label" style="margin-bottom:8px;display:block;">Amenities</span>
           <div class="se-chips" id="seChips">
             <div class="se-chip" data-value="wifi">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+                <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+                <circle cx="12" cy="20" r="1" fill="currentColor" />
+              </svg>
               WiFi
             </div>
             <div class="se-chip" data-value="pool">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 12h20M2 16c1.5-1 3-1 4.5 0s3 1 4.5 0 3-1 4.5 0 3 1 4.5 0"/><rect x="7" y="2" width="10" height="10" rx="2"/></svg>
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M2 12h20M2 16c1.5-1 3-1 4.5 0s3 1 4.5 0 3-1 4.5 0 3 1 4.5 0" />
+                <rect x="7" y="2" width="10" height="10" rx="2" />
+              </svg>
               Pool
             </div>
             <div class="se-chip" data-value="parking">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
+              </svg>
               Parking
             </div>
             <div class="se-chip" data-value="ac">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/></svg>
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" />
+              </svg>
               AC
             </div>
             <div class="se-chip" data-value="kitchen">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/><path d="M9 3v18M15 9H9"/></svg>
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" />
+                <path d="M9 3v18M15 9H9" />
+              </svg>
               Kitchen
             </div>
             <div class="se-chip" data-value="gym">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+                <line x1="6" y1="1" x2="6" y2="4" />
+                <line x1="10" y1="1" x2="10" y2="4" />
+                <line x1="14" y1="1" x2="14" y2="4" />
+              </svg>
               Gym
             </div>
             <div class="se-chip" data-value="pets">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="4.5" cy="9.5" r="2.5"/><circle cx="19.5" cy="9.5" r="2.5"/><circle cx="9" cy="4.5" r="2.5"/><circle cx="15" cy="4.5" r="2.5"/><path d="M12 13c-2.33 2.67-4 4.5-4 6a4 4 0 0 0 8 0c0-1.5-1.67-3.33-4-6z"/></svg>
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="4.5" cy="9.5" r="2.5" />
+                <circle cx="19.5" cy="9.5" r="2.5" />
+                <circle cx="9" cy="4.5" r="2.5" />
+                <circle cx="15" cy="4.5" r="2.5" />
+                <path d="M12 13c-2.33 2.67-4 4.5-4 6a4 4 0 0 0 8 0c0-1.5-1.67-3.33-4-6z" />
+              </svg>
               Pet-friendly
             </div>
             <div class="se-chip" data-value="beachfront">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2c0 6-8 8-8 14a8 8 0 0 0 16 0c0-6-8-8-8-14z"/></svg>
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 2c0 6-8 8-8 14a8 8 0 0 0 16 0c0-6-8-8-8-14z" />
+              </svg>
               Beachfront
             </div>
           </div>
@@ -772,38 +1087,66 @@
     </div>
   </div><!-- /.se-filter-panel -->
 
-  <!-- ════ MOBILE DRAWER ════ -->
+  <!-- ════ ENHANCED MOBILE DRAWER ════ -->
   <div class="se-mobile-drawer" id="seDrawer">
 
     <a href="/" class="se-drawer-link">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg>
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <path d="M3 12L12 3l9 9" />
+        <path d="M9 21V12h6v9" />
+      </svg>
       Home
     </a>
     <a href="/stays" class="se-drawer-link">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
       All Stays
     </a>
+    <% if (Role=="host") { %>
     <a href="/stays/new" class="se-drawer-link highlight">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 8v8M8 12h8" />
+      </svg>
       Create Stay
     </a>
-    <a href="/wishlist" class="se-drawer-link">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <% } %>
+    <a href="/user/wishlist" class="se-drawer-link">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <path
+          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+      </svg>
       Wishlist
     </a>
+    <% if (isLoggedIn) { %>
     <a href="/user/my/bookings" class="se-drawer-link">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="18" rx="2" />
+        <path d="M16 2v4M8 2v4M3 10h18" />
+      </svg>
       My Bookings
     </a>
+    <% } %>
 
     <!-- Mobile Filters -->
     <div class="se-drawer-sep"></div>
     <button class="se-mobile-filter-toggle" id="seMobileFilterToggle" type="button">
       <span style="display:flex;align-items:center;gap:8px;">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <line x1="4" y1="6" x2="20" y2="6" />
+          <line x1="8" y1="12" x2="16" y2="12" />
+          <line x1="11" y1="18" x2="13" y2="18" />
+        </svg>
         Filters &amp; Sort
       </span>
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" id="seMobileChevron"><path d="M6 9l6 6 6-6"/></svg>
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"
+        id="seMobileChevron">
+        <path d="M6 9l6 6 6-6" />
+      </svg>
     </button>
 
     <div class="se-mobile-filter-body" id="seMobileFilterBody">
@@ -818,7 +1161,9 @@
               <option value="cabin">Cabin</option>
               <option value="farmhouse">Farmhouse</option>
             </select>
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
           </div>
         </div>
         <div class="se-filter-group">
@@ -838,7 +1183,9 @@
               <option value="price_desc">Price: High to low</option>
               <option value="rating">Top rated</option>
             </select>
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
           </div>
         </div>
         <button type="submit" class="se-btn-apply" style="width:100%;padding:11px;">Apply filters</button>
@@ -852,117 +1199,124 @@
         <a href="/user/register" class="se-btn-outline" style="text-align:center;display:block;">Register</a>
         <a href="/user/login" class="se-btn-primary" style="text-align:center;display:block;">Login</a>
       </div>
-    <% } else { %>
-      <form action="/user/logout" method="post">
-        <button type="submit" class="se-drawer-link" style="width:100%;background:none;border:none;cursor:pointer;color:var(--se-brand);font-weight:700;">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          Logout
-        </button>
-      </form>
-    <% } %>
+      <% } else { %>
+        <form action="/user/logout" method="post">
+          <button type="submit" class="se-drawer-link"
+            style="width:100%;background:none;border:none;cursor:pointer;color:var(--se-brand);font-weight:700;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Logout
+          </button>
+        </form>
+        <% } %>
 
   </div><!-- /.se-mobile-drawer -->
 
 </nav>
 
 <script>
-(function() {
-  const filterToggle = document.getElementById('seFilterToggle');
-  const filterPanel  = document.getElementById('seFilterPanel');
-  const filterBadge  = document.getElementById('seFilterBadge');
-  const activeTags   = document.getElementById('seActiveTags');
-  const clearBtn     = document.getElementById('seClearBtn');
-  const chips        = document.querySelectorAll('.se-chip');
-  const mobileToggle = document.getElementById('seToggle');
-  const drawer       = document.getElementById('seDrawer');
-  const mobileFilterToggle = document.getElementById('seMobileFilterToggle');
-  const mobileFilterBody   = document.getElementById('seMobileFilterBody');
-  const mobileChevron      = document.getElementById('seMobileChevron');
+  (function () {
+    const filterToggle = document.getElementById('seFilterToggle');
+    const filterPanel = document.getElementById('seFilterPanel');
+    const filterBadge = document.getElementById('seFilterBadge');
+    const activeTags = document.getElementById('seActiveTags');
+    const clearBtn = document.getElementById('seClearBtn');
+    const chips = document.querySelectorAll('.se-chip');
+    const mobileToggle = document.getElementById('seToggle');
+    const drawer = document.getElementById('seDrawer');
+    const mobileFilterToggle = document.getElementById('seMobileFilterToggle');
+    const mobileFilterBody = document.getElementById('seMobileFilterBody');
+    const mobileChevron = document.getElementById('seMobileChevron');
 
-  const filterFields = [
-    { id: 'filterType',     label: 'Type' },
-    { id: 'filterMinPrice', label: 'Min ₹' },
-    { id: 'filterMaxPrice', label: 'Max ₹' },
-    { id: 'filterBedrooms', label: 'Beds' },
-    { id: 'filterSort',     label: 'Sort' },
-    { id: 'filterRating',   label: 'Rating' },
-  ];
+    const filterFields = [
+      { id: 'filterType', label: 'Type' },
+      { id: 'filterMinPrice', label: 'Min ₹' },
+      { id: 'filterMaxPrice', label: 'Max ₹' },
+      { id: 'filterBedrooms', label: 'Beds' },
+      { id: 'filterSort', label: 'Sort' },
+      { id: 'filterRating', label: 'Rating' },
+    ];
 
-  let selectedAmenities = [];
+    let selectedAmenities = [];
 
-  function updateBadgeAndTags() {
-    let count = 0;
-    activeTags.innerHTML = '';
+    function updateBadgeAndTags() {
+      let count = 0;
+      activeTags.innerHTML = '';
+      filterFields.forEach(f => {
+        const el = document.getElementById(f.id);
+        if (el && el.value) {
+          count++;
+          addTag(f.label + ': ' + el.value, () => { el.value = ''; updateBadgeAndTags(); });
+        }
+      });
+      selectedAmenities.forEach(a => {
+        count++;
+        addTag(a, () => {
+          selectedAmenities = selectedAmenities.filter(x => x !== a);
+          chips.forEach(c => { if (c.dataset.value === a) c.classList.remove('selected'); });
+          updateBadgeAndTags();
+        });
+      });
+      filterBadge.textContent = count;
+      if (count > 0) filterBadge.classList.add('show');
+      else filterBadge.classList.remove('show');
+    }
+
+    function addTag(text, removeFn) {
+      const tag = document.createElement('div');
+      tag.className = 'se-active-tag';
+      tag.innerHTML = `<span>${text}</span>`;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.innerHTML = '&times;';
+      btn.addEventListener('click', removeFn);
+      tag.appendChild(btn);
+      activeTags.appendChild(tag);
+    }
+
+    filterToggle.addEventListener('click', () => {
+      filterPanel.classList.toggle('open');
+      filterToggle.classList.toggle('active');
+    });
+
     filterFields.forEach(f => {
       const el = document.getElementById(f.id);
-      if (el && el.value) {
-        count++;
-        addTag(f.label + ': ' + el.value, () => { el.value = ''; updateBadgeAndTags(); });
-      }
+      if (el) el.addEventListener('change', updateBadgeAndTags);
+      if (el) el.addEventListener('input', updateBadgeAndTags);
     });
-    selectedAmenities.forEach(a => {
-      count++;
-      addTag(a, () => {
-        selectedAmenities = selectedAmenities.filter(x => x !== a);
-        chips.forEach(c => { if (c.dataset.value === a) c.classList.remove('selected'); });
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const val = chip.dataset.value;
+        chip.classList.toggle('selected');
+        if (chip.classList.contains('selected')) {
+          if (!selectedAmenities.includes(val)) selectedAmenities.push(val);
+        } else {
+          selectedAmenities = selectedAmenities.filter(a => a !== val);
+        }
         updateBadgeAndTags();
       });
     });
-    filterBadge.textContent = count;
-    if (count > 0) filterBadge.classList.add('show');
-    else filterBadge.classList.remove('show');
-  }
 
-  function addTag(text, removeFn) {
-    const tag = document.createElement('div');
-    tag.className = 'se-active-tag';
-    tag.innerHTML = `<span>${text}</span>`;
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.innerHTML = '&times;';
-    btn.addEventListener('click', removeFn);
-    tag.appendChild(btn);
-    activeTags.appendChild(tag);
-  }
-
-  filterToggle.addEventListener('click', () => {
-    filterPanel.classList.toggle('open');
-    filterToggle.classList.toggle('active');
-  });
-
-  filterFields.forEach(f => {
-    const el = document.getElementById(f.id);
-    if (el) el.addEventListener('change', updateBadgeAndTags);
-    if (el) el.addEventListener('input', updateBadgeAndTags);
-  });
-
-  chips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const val = chip.dataset.value;
-      chip.classList.toggle('selected');
-      if (chip.classList.contains('selected')) {
-        if (!selectedAmenities.includes(val)) selectedAmenities.push(val);
-      } else {
-        selectedAmenities = selectedAmenities.filter(a => a !== val);
-      }
+    clearBtn.addEventListener('click', () => {
+      filterFields.forEach(f => { const el = document.getElementById(f.id); if (el) el.value = ''; });
+      selectedAmenities = [];
+      chips.forEach(c => c.classList.remove('selected'));
       updateBadgeAndTags();
     });
-  });
 
-  clearBtn.addEventListener('click', () => {
-    filterFields.forEach(f => { const el = document.getElementById(f.id); if (el) el.value = ''; });
-    selectedAmenities = [];
-    chips.forEach(c => c.classList.remove('selected'));
-    updateBadgeAndTags();
-  });
+    mobileToggle.addEventListener('click', () => {
+      drawer.classList.toggle('open');
+    });
 
-  mobileToggle.addEventListener('click', () => {
-    drawer.classList.toggle('open');
-  });
-
-  mobileFilterToggle.addEventListener('click', () => {
-    mobileFilterBody.classList.toggle('open');
-    mobileChevron.style.transform = mobileFilterBody.classList.contains('open') ? 'rotate(180deg)' : '';
-  });
-})();
+    if(mobileFilterToggle && mobileFilterBody && mobileChevron) {
+      mobileFilterToggle.addEventListener('click', () => {
+        mobileFilterBody.classList.toggle('open');
+        mobileChevron.style.transform = mobileFilterBody.classList.contains('open') ? 'rotate(180deg)' : '';
+      });
+    }
+  })();
 </script>

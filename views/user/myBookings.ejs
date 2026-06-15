@@ -1,117 +1,60 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
-<div class="mb-3 container">
-    <h1 class="fw-bold">My Bookings</h1>
-</div>
+<section class="container py-5">
 
-<!-- Stay Grid -->
+    <div class="mb-5 text-center">
+        <h1 class="fw-bold mb-2">My Bookings</h1>
+        <p class="text-muted mb-0">Review your booked stays with quick access to details and availability.</p>
+    </div>
 
     <div class="row g-4">
 
         <% for(let stay of stays) { %>
 
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-6 col-lg-4">
 
-                <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 stay-card">
+                <div class="card booking-card h-100 overflow-hidden border-0">
 
-                    <!-- Image -->
+                    <div class="position-relative booking-image-wrapper">
+                        <img
+                            src="<%= (stay.images && stay.images[0]) ? stay.images[0].url : 'https://via.placeholder.com/800x600?text=No+image' %>"
+                            class="booking-image"
+                            alt="stay image"
+                        >
+                        <span class="booking-status badge rounded-pill <%= stay.isAvailable ? 'bg-success' : 'bg-danger' %>">
+                            <%= stay.isAvailable ? 'Available' : 'Booked' %>
+                        </span>
+                    </div>
 
-                    <img
-                        src="<%= (stay.images && stay.images[0]) ? stay.images[0].url : 'https://via.placeholder.com/800x600?text=No+image' %>"
-                        class="card-img-top"
-                        alt="stay image"
-                        style="height: 240px; object-fit: cover;"
-                    >
+                    <div class="card-body d-flex flex-column gap-3">
 
-                    <!-- Card Body -->
-
-                    <div class="card-body d-flex flex-column">
-
-                        <!-- Top -->
-
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-
-                            <h5 class="fw-bold mb-0">
-
-                                <%= stay.name %>
-
-                            </h5>
-
-                            <% if(stay.isAvailable) { %>
-
-                                <span class="badge bg-success rounded-pill">
-                                    Available
-                                </span>
-
-                            <% } else { %>
-
-                                <span class="badge bg-danger rounded-pill">
-                                    Booked
-                                </span>
-
-                            <% } %>
-
+                        <div>
+                            <h5 class="booking-title fw-bold mb-2"><%= stay.name %></h5>
+                            <p class="text-muted mb-1">
+                                📍 <%= stay.location %>
+                            </p>
+                            <p class="text-secondary small mb-0 booking-description">
+                                <%= stay.description.substring(0, 90) %>...
+                            </p>
                         </div>
 
-                        <!-- Location -->
-
-                        <p class="text-muted mb-2">
-
-                            📍 <%= stay.location %>
-
-                        </p>
-
-                        <!-- Description -->
-
-                        <p class="text-secondary small flex-grow-1">
-
-                            <%= stay.description.substring(0, 90) %>...
-
-                        </p>
-
-                        <!-- Type & Capacity -->
-
-                        <div class="d-flex justify-content-between mb-3">
-
-                            <span class="badge bg-light text-dark border">
-
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 booking-meta">
+                            <span class="badge booking-tag bg-light text-dark border py-2 px-3">
                                 <%= stay.type %>
-
                             </span>
-
                             <span class="text-muted small">
-
                                 👥 <%= stay.capacity %> Guests
-
                             </span>
-
                         </div>
 
-                        <!-- Bottom -->
-
-                        <div class="d-flex justify-content-between align-items-center">
-
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
                             <div>
-
-                                <span class="fw-bold fs-5">
-
-                                    ₹<%= stay.price %>
-
-                                </span>
-
-                                <span class="text-muted small">
-                                    / night
-                                </span>
-
+                                <div class="booking-price fw-bold">₹<%= stay.price %></div>
+                                <small class="text-muted">/ night</small>
                             </div>
-
-                            <a
-                                href="/user/my/bookings/<%= stay._id %>"
-                                class="btn btn-dark rounded-pill px-4"
-                            >
+                            <a href="/user/my/bookings/<%= stay._id %>" class="btn btn-dark booking-button rounded-pill px-4 py-2">
                                 View Details
                             </a>
-
                         </div>
 
                     </div>
@@ -128,21 +71,78 @@
 
 <style>
 
-.stay-card{
-    transition: all 0.3s ease;
+.booking-card {
+    border-radius: 28px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.stay-card:hover{
-    transform: translateY(-6px);
-    box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+.booking-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.14);
 }
 
-.card-img-top{
+.booking-image-wrapper {
+    overflow: hidden;
+    position: relative;
+}
+
+.booking-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
     transition: transform 0.4s ease;
 }
 
-.stay-card:hover .card-img-top{
-    transform: scale(1.05);
+.booking-card:hover .booking-image {
+    transform: scale(1.04);
+}
+
+.booking-status {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.booking-title {
+    font-size: 1.1rem;
+    line-height: 1.3;
+}
+
+.booking-description {
+    min-height: 3.2rem;
+}
+
+.booking-meta {
+    border-top: 1px solid #f1f1f1;
+    padding-top: 1rem;
+}
+
+.booking-tag {
+    font-size: 0.85rem;
+    border-radius: 999px;
+}
+
+.booking-price {
+    font-size: 1.3rem;
+    color: #111827;
+}
+
+.booking-button {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 768px) {
+    .booking-image {
+        height: 220px;
+    }
 }
 
 </style>

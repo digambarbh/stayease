@@ -28,7 +28,8 @@
 
                     <div class="card-body p-5">
 
-                        <form action="/stays/new" method="POST" enctype="multipart/form-data" novalidate class="validated-form">
+                        <form action="/stays/new" method="POST" enctype="multipart/form-data" novalidate
+                            class="validated-form">
 
                             <!-- Stay Name -->
 
@@ -111,8 +112,8 @@
 
                                 <input type="file" name="image" class="form-control rounded-3 mb-3" multiple>
                                 <small class="text-muted">
-                                Upload multiple scenic images
-                            </small>
+                                    Upload multiple scenic images
+                                </small>
                             </div>
 
                             <!-- Stay Type -->
@@ -175,22 +176,22 @@
     </section>
 
     <script>
-         (() => {
-      'use strict'
+        (() => {
+            'use strict'
 
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.validated-form')
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.validated-form')
 
-      // Loop over them and prevent submission
-      Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
 
-          form.classList.add('was-validated')
-        }, false)
-      })
-    })()
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
     </script>

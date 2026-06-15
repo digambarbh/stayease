@@ -1,138 +1,388 @@
 <%- layout("/layouts/boilerplate.ejs") %>
 
-<section class="container d-flex justify-content-center align-items-center min-vh-100">
-
-    <div class="border rounded p-4 shadow bg-white" style="width: 550px;">
-
-        <h3 class="mb-1 text-center">
-            Book Your Stay
-        </h3>
-
-        <!-- Stay Name -->
-        <p class="text-center text-muted mb-4" style="font-size: 0.9rem;">
-            📍 <%= stay.name %>
-        </p>
-
-        <form action="/bookings/<%= stay._id %>" method="POST">
-
-            <!-- Check-in Date -->
-            <div class="mb-3">
-                <label class="form-label">Check-in Date</label>
-                <input
-                    type="date"
-                    name="checkIn"
-                    class="form-control"
-                    required
-                >
-            </div>
-
-            <!-- Check-out Date -->
-            <div class="mb-3">
-                <label class="form-label">Check-out Date</label>
-                <input
-                    type="date"
-                    name="checkOut"
-                    class="form-control"
-                    required
-                >
-            </div>
-
-            <!-- Guests -->
-            <div class="mb-3">
-                <label class="form-label">Number of Guests</label>
-                <input
-                    type="number"
-                    name="guests"
-                    class="form-control"
-                    min="1"
-                    max="<%= stay.maxGuests %>"
-                    placeholder="Enter number of guests"
-                    required
-                >
-            </div>
-            <!-- Price Summary -->
-            <div class="mb-4 p-3 rounded" style="background-color: #f8f9fa;">
-
-                <div class="d-flex justify-content-between mb-1">
-                    <small class="text-muted">Stay</small>
-                    <small class="fw-semibold"><%= stay.name %></small>
-                </div>
-
-                <div class="d-flex justify-content-between mb-1">
-                    <small class="text-muted">Price per night</small>
-                    <small>&#8377;<%= stay.price %></small>
-                </div>
-
-                <div class="d-flex justify-content-between mb-1">
-                    <small class="text-muted">Nights</small>
-                    <small id="nightCount">-</small>
-                </div>
-
-                <hr class="my-2">
-
-                <div class="d-flex justify-content-between">
-                    <small class="fw-bold">Total</small>
-                    <small class="fw-bold" id="totalPrice">-</small>
-                </div>
-
-            </div>
-
-            <!-- Hidden fields -->
-            <input type="hidden" name="totalPrice" id="totalPriceInput">
-            <input type="hidden" name="nights" id="nightsInput">
-
-            <!-- Submit -->
-            <button type="submit" class="btn btn-dark w-100">
-                Confirm Booking
-            </button>
-
-        </form>
-
-        <div class="text-center mt-3">
-            <small>
-                <a href="/stays/<%= stay._id %>" class="text-decoration-none text-muted">
-                    ← Back to <%= stay.name %>
-                </a>
-            </small>
-        </div>
-
-    </div>
-
-</section>
-
-<script>
-    const pricePerNight = "<%= stay.price %>";
-
-    const checkIn  = document.querySelector('input[name="checkIn"]');
-    const checkOut = document.querySelector('input[name="checkOut"]');
-
-    // Set min date to today
-    const today = new Date().toISOString().split("T")[0];
-    checkIn.min  = today;
-    checkOut.min = today;
-
-    function calculateTotal() {
-        const inDate  = new Date(checkIn.value);
-        const outDate = new Date(checkOut.value);
-
-        if (checkIn.value && checkOut.value && outDate > inDate) {
-            const nights = Math.ceil((outDate - inDate) / (1000 * 60 * 60 * 24));
-            const total  = nights * pricePerNight;
-
-            document.getElementById("nightCount").textContent = nights + " night(s)";
-            document.getElementById("totalPrice").textContent = "₹" + total.toLocaleString("en-IN");
-            document.getElementById("totalPriceInput").value  = total;
-            document.getElementById("nightsInput").value      = nights;
-        } else {
-            document.getElementById("nightCount").textContent = "-";
-            document.getElementById("totalPrice").textContent = "-";
-        }
+<style>
+    .page-background {
+        background-image: linear-gradient(rgba(248, 250, 252, 0.5), rgba(248, 250, 252, 0.9)), url('https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=2000&q=80');
+        background-size: cover;
+        background-position: center;
+        min-height: calc(100vh - 80px);
+        padding: 4rem 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
     }
 
-    checkIn.addEventListener("change", () => {
-        checkOut.min = checkIn.value;
-        calculateTotal();
-    });
+    .booking-card {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        border: 1px solid rgba(0,0,0,0.04);
+        padding: 3rem;
+        width: 100%;
+    }
 
-    checkOut.addEventListener("change", calculateTotal);
-</script>
+    .booking-header h3 {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #222222;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem;
+    }
+
+    .booking-subtitle {
+        color: #717171;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 2.5rem;
+    }
+
+    .form-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #222222;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+    }
+
+    .custom-input {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 14px 16px;
+        font-size: 1rem;
+        color: #222222;
+        transition: all 0.2s ease;
+        width: 100%;
+    }
+
+    .custom-input:focus {
+        background-color: #ffffff;
+        border-color: #222222;
+        box-shadow: 0 0 0 4px rgba(34, 34, 34, 0.1);
+        outline: none;
+    }
+
+    .summary-box {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        margin-top: 2rem;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+        color: #475569;
+    }
+
+    .summary-row.total-row {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e2e8f0;
+        font-weight: 800;
+        color: #222222;
+        font-size: 1.2rem;
+        margin-bottom: 0;
+    }
+
+    .btn-booking {
+        background: linear-gradient(135deg, #FF385C 0%, #D70466 100%);
+        color: white;
+        padding: 16px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        width: 100%;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-booking:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(227, 28, 95, 0.3);
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 1.5rem;
+        color: #717171;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.2s;
+        text-align: center;
+        width: 100%;
+    }
+
+    .back-link:hover {
+        color: #222222;
+    }
+
+    /* Stay Card CSS (Imported to match stay.ejs exactly) */
+    .stay-card {
+        border: none !important;
+        border-radius: 24px !important; /* Slightly more rounded for booking page */
+        overflow: hidden;
+        background-color: #ffffff !important;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
+        transition: none !important;
+        position: relative;
+        height: auto !important; /* Allow natural height instead of stretching */
+    }
+    .card-img-top {
+        border-radius: 0 !important; /* Image fills top of card */
+        height: 280px !important;
+        object-fit: cover;
+        margin-bottom: 0;
+        transition: none !important;
+    }
+    .stay-card .card-body {
+        padding: 2rem !important; /* Add padding back since it's a standalone card now */
+    }
+    .stay-card .d-flex.justify-content-between.align-items-start.mb-2 {
+        margin-bottom: 1rem !important;
+    }
+    .stay-card h5.fw-bold {
+        color: #222222;
+        font-size: 1.3rem;
+        font-weight: 800 !important;
+        line-height: 1.2;
+        margin-bottom: 0.5rem !important;
+        white-space: normal;
+        max-width: 100%;
+    }
+    .stay-card p.text-muted {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #717171 !important;
+        margin-bottom: 1rem !important;
+    }
+    .stay-card .text-secondary.small {
+        font-size: 1rem;
+        color: #717171 !important;
+        margin-bottom: 1.5rem !important;
+        line-height: 1.5;
+        white-space: normal;
+    }
+    .stay-card .d-flex.justify-content-between.mb-3 {
+        border-top: 1px solid #ebebeb;
+        padding-top: 1.5rem;
+        margin-bottom: 1.5rem !important;
+        justify-content: flex-start !important;
+        gap: 12px;
+    }
+    .stay-card .badge {
+        font-size: 0.95rem;
+        padding: 0;
+        font-weight: 500;
+        border-radius: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        color: #222 !important;
+        letter-spacing: 0;
+    }
+    .stay-card .d-flex.mb-3 .text-muted.small {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #222 !important;
+    }
+    .stay-card .d-flex.justify-content-between.align-items-center {
+        justify-content: flex-start !important;
+        margin-top: 1rem;
+    }
+    .stay-card span.fw-bold.fs-5 {
+        font-size: 1.3rem !important;
+        font-weight: 800 !important;
+        color: #222222;
+        letter-spacing: -0.02em;
+    }
+    .stay-card .align-items-center .text-muted.small {
+        font-size: 1.1rem !important;
+        color: #717171 !important;
+        font-weight: 500 !important;
+        margin-left: 6px;
+    }
+
+    @media (max-width: 991px) {
+        .booking-card {
+            margin-top: 0;
+        }
+        .stay-card-container {
+            margin-bottom: 2rem;
+        }
+    }
+</style>
+
+<div class="page-background">
+    <div class="container">
+        <div class="row g-4 justify-content-center align-items-start">
+        <!-- Stay Card Column -->
+        <div class="col-lg-5 col-xl-4 stay-card-container">
+            <h3 style="font-weight: 800; margin-bottom: 1.5rem; color: #222;">Review your stay</h3>
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 stay-card">
+                <!-- Image -->
+                <img src="<%= (stay.images && stay.images[0]) ? stay.images[0].url : 'https://via.placeholder.com/800x600?text=No+image' %>"
+                    class="card-img-top" alt="stay image" style="object-fit: cover;">
+                
+                <!-- Card Body -->
+                <div class="card-body d-flex flex-column bg-white">
+                    
+                    <!-- Top -->
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="fw-bold mb-0">
+                            <%= stay.name %>
+                        </h5>
+                        <% if(stay.isAvailable) { %>
+                            <span class="badge bg-success rounded-pill">Available</span>
+                        <% } else { %>
+                            <span class="badge bg-danger rounded-pill">Booked</span>
+                        <% } %>
+                    </div>
+
+                    <!-- Location -->
+                    <p class="text-muted mb-2">
+                        📍 <%= stay.location %>
+                    </p>
+
+                    <!-- Description -->
+                    <p class="text-secondary small flex-grow-1">
+                        <%= stay.description ? stay.description.substring(0, 90) + '...' : '' %>
+                    </p>
+
+                    <!-- Type & Capacity -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="badge bg-light text-dark border">
+                            <%= stay.type || 'Villa' %>
+                        </span>
+                        <span class="text-muted small">
+                            👥 <%= stay.capacity || 2 %> Guests
+                        </span>
+                    </div>
+
+                    <!-- Bottom -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-bold fs-5">
+                                ₹<%= stay.price %>
+                            </span>
+                            <span class="text-muted small">
+                                / night
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Form Column -->
+        <div class="col-lg-7 col-xl-6">
+            <div class="booking-card mx-auto m-lg-0 w-100" style="max-width: none;">
+                
+                <div class="booking-header text-center">
+                    <h3>Confirm Booking</h3>
+                    <p class="booking-subtitle">Choose dates and guests</p>
+                </div>
+
+                <form action="/bookings/<%= stay._id %>" method="POST">
+                    
+                    <div class="row g-3 mb-3">
+                        <!-- Check-in Date -->
+                        <div class="col-md-6">
+                            <label class="form-label">Check-in</label>
+                            <input type="date" name="checkIn" class="custom-input" required>
+                        </div>
+
+                        <!-- Check-out Date -->
+                        <div class="col-md-6">
+                            <label class="form-label">Check-out</label>
+                            <input type="date" name="checkOut" class="custom-input" required>
+                        </div>
+                    </div>
+
+                    <!-- Guests -->
+                    <div class="mb-3">
+                        <label class="form-label">Number of Guests</label>
+                        <input type="number" name="guests" class="custom-input" min="1" max="<%= stay.capacity || stay.maxGuests || 10 %>"
+                            placeholder="Enter number of guests" required>
+                    </div>
+                    
+                    <!-- Price Summary -->
+                    <div class="summary-box">
+                        <div class="summary-row">
+                            <span>Stay</span>
+                            <span class="fw-semibold text-end" style="max-width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= stay.name %></span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Price per night</span>
+                            <span>&#8377;<%= stay.price %></span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Nights</span>
+                            <span id="nightCount">-</span>
+                        </div>
+                        <div class="summary-row total-row">
+                            <span>Total</span>
+                            <span id="totalPrice">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Hidden fields -->
+                    <input type="hidden" name="totalPrice" id="totalPriceInput">
+                    <input type="hidden" name="nights" id="nightsInput">
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn-booking">
+                        Proceed to Payment
+                    </button>
+
+                </form>
+
+                <a href="/stays/<%= stay._id %>" class="back-link">
+                    ← Back to listing
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        const pricePerNight = "<%= stay.price %>";
+
+        const checkIn = document.querySelector('input[name="checkIn"]');
+        const checkOut = document.querySelector('input[name="checkOut"]');
+
+        // Set min date to today
+        const today = new Date().toISOString().split("T")[0];
+        checkIn.min = today;
+        checkOut.min = today;
+
+        function calculateTotal() {
+            const inDate = new Date(checkIn.value);
+            const outDate = new Date(checkOut.value);
+
+            if (checkIn.value && checkOut.value && outDate > inDate) {
+                const nights = Math.ceil((outDate - inDate) / (1000 * 60 * 60 * 24));
+                const total = nights * pricePerNight;
+
+                document.getElementById("nightCount").textContent = nights + " night(s)";
+                document.getElementById("totalPrice").textContent = "₹" + total.toLocaleString("en-IN");
+                document.getElementById("totalPriceInput").value = total;
+                document.getElementById("nightsInput").value = nights;
+            } else {
+                document.getElementById("nightCount").textContent = "-";
+                document.getElementById("totalPrice").textContent = "-";
+            }
+        }
+
+        checkIn.addEventListener("change", () => {
+            checkOut.min = checkIn.value;
+            calculateTotal();
+        });
+
+        checkOut.addEventListener("change", calculateTotal);
+    </script>
+</div>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet">
-<script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -18,31 +18,88 @@
 
 <style>
     /* Hide scrollbar for Chrome, Edge, Safari */
-::-webkit-scrollbar {
-    display: none;
-}
+    ::-webkit-scrollbar {
+        display: none;
+    }
 
-/* Hide scrollbar for Firefox */
-html {
-    scrollbar-width: none;
-}
+    /* Hide scrollbar for Firefox */
+    html {
+        scrollbar-width: none;
+    }
 
-/* Hide scrollbar for IE and old Edge */
-body {
-    -ms-overflow-style: none;
-}
+    /* Hide scrollbar for IE and old Edge */
+    body {
+        -ms-overflow-style: none;
+    }
+    /* Floating Custom Flash */
+    .custom-flash {
+        position: fixed;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        width: max-content;
+        max-width: 90%;
+        text-align: center;
+        border-radius: 50px;
+        border: none;
+        padding: 14px 28px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1), fadeOut 0.5s ease 4.5s forwards;
+    }
+
+    /* Enhance standard bootstrap alert colors for the flash */
+    .custom-flash.alert-success { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+    .custom-flash.alert-danger { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .custom-flash.alert-warning { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+    .custom-flash.alert-info { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+
+    @keyframes slideDown {
+        0% { top: -100px; opacity: 0; transform: translate(-50%, -20px) scale(0.9); }
+        100% { top: 30px; opacity: 1; transform: translate(-50%, 0) scale(1); }
+    }
+    
+    @keyframes fadeOut {
+        0% { opacity: 1; visibility: visible; top: 30px; }
+        100% { opacity: 0; visibility: hidden; top: -50px; }
+    }
+
+    @media (max-width: 768px) {
+        .custom-flash {
+            top: 20px;
+            padding: 12px 20px;
+            width: 90%;
+            border-radius: 16px;
+        }
+        .custom-flash span {
+            font-size: 0.9rem !important;
+        }
+        @keyframes slideDown {
+            0% { top: -100px; opacity: 0; transform: translate(-50%, -20px) scale(0.9); }
+            100% { top: 20px; opacity: 1; transform: translate(-50%, 0) scale(1); }
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; visibility: visible; top: 20px; }
+            100% { opacity: 0; visibility: hidden; top: -50px; }
+        }
+    }
 </style>
+
 <body class="d-flex flex-column min-vh-100">
 
     <%- include('../partials/navbar.ejs') %>
+        <% if(flash){ %>
+            <div class="alert alert-<%= flash.type %> custom-flash d-flex justify-content-center align-items-center" role="alert">
+                <span class="fw-bold fs-6" style="letter-spacing: 0.02em;"><%= flash.message %></span>
+            </div>
+            <% } %>
+                <main class="container flex-grow-1">
+                    <%- body %>
+                </main>
 
-        <main class="container flex-grow-1">
-            <%- body %>
-        </main>
+                <%- include('../partials/footer.ejs') %>
 
-        <%- include('../partials/footer.ejs') %>
-
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

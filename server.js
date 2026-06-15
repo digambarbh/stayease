@@ -11,7 +11,7 @@ const methodOverride = require("method-override")
 const cookieParser = require('cookie-parser')
 const User = require("./model/user")
 const Blacklist = require("./model/blacklist")
-const bookingRoute=require("./routes/booking")
+const bookingRoute = require("./routes/booking")
 const stay = require("./model/stay")
 connectDb()
 
@@ -54,22 +54,31 @@ app.use(async (req, res, next) => {
         next()
     }
 })
-app.get('/', async(req, res) => {
+
+app.use((req, res, next) => {
+    res.locals.flash = req.cookies.flash;
+
+    if (req.cookies.flash) {
+        res.clearCookie("flash");
+    }
+    next();
+});
+app.get('/', async (req, res) => {
     const stays = await stay.find({})
         .limit(8);
 
     const destinations = [
         {
-            name:"Goa",
-            image:"/images/goa.jpg"
+            name: "Goa",
+            image: "/images/goa.jpg"
         },
         {
-            name:"Kerala",
-            image:"/images/kerala.jpg"
+            name: "Kerala",
+            image: "/images/kerala.jpg"
         },
         {
-            name:"Himachal",
-            image:"/images/himachal.jpg"
+            name: "Himachal",
+            image: "/images/himachal.jpg"
         }
     ];
 
@@ -80,7 +89,7 @@ app.get('/', async(req, res) => {
 })
 app.use("/user", userRoute);
 app.use("/stays", stayRoute);
-app.use("/bookings",bookingRoute)
+app.use("/bookings", bookingRoute)
 
 
 

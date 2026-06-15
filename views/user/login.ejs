@@ -1,71 +1,101 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
-<section class="container d-flex justify-content-center align-items-center min-vh-100">
-
-    <div class="border rounded p-4 shadow bg-white" style="width: 550px;">
-
-        <h3 class="mb-4 text-center">
-            Welcome Back
-        </h3>
-
-        <form action="/user/login" method="POST">
-            <input type="hidden" name="redirect" value="<%= redirect %>">
-            <!-- Email -->
-
-            <div class="mb-3">
-
-                <label class="form-label">
-                    Email
-                </label>
-
-                <input
-                    type="email"
-                    name="email"
-                    class="form-control"
-                    required
-                >
-
+<section class="container d-flex justify-content-center align-items-center py-5 min-vh-80">
+    <div class="card border-0 shadow-lg overflow-hidden w-100" style="max-width: 960px; border-radius: var(--radius-md) !important; background-color: #ffffff;">
+        <div class="row g-0">
+            
+            <!-- Left Panel (Desktop Image) -->
+            <div class="col-md-6 d-none d-md-block position-relative" style="background: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80') no-repeat center center; background-size: cover; min-height: 480px;">
+                <div class="position-absolute inset-0 bg-gradient-to-t" style="background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 100%); width:100%; height:100%; top:0; left:0;"></div>
+                <div class="position-absolute bottom-0 start-0 p-5 text-white">
+                    <h2 class="fw-extrabold mb-2 text-white" style="font-size: 2rem; letter-spacing: -0.5px;">Welcome Back</h2>
+                    <p class="text-light opacity-90 mb-0">Discover and book stays all around India with StayEase.</p>
+                </div>
             </div>
 
-            <!-- Password -->
+            <!-- Right Panel (Login Form) -->
+            <div class="col-md-6 col-12 d-flex align-items-center">
+                <div class="card-body p-4 p-md-5">
+                    
+                    <div class="mb-4 d-md-none text-center">
+                        <h3 class="fw-extrabold mb-1">Welcome Back</h3>
+                        <p class="text-muted small">Login to manage your bookings</p>
+                    </div>
 
-            <div class="mb-4">
+                    <h4 class="fw-extrabold mb-4 d-none d-md-block" style="letter-spacing: -0.5px; color: var(--dark);">Sign In</h4>
 
-                <label class="form-label">
-                    Password
-                </label>
+                    <form action="/user/login" method="POST" class="validated-form" novalidate>
+                        <input type="hidden" name="redirect" value="<%= redirect %>">
+                        
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-envelope text-muted"></i></span>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    class="form-control border-start-0"
+                                    placeholder="name@example.com"
+                                    required
+                                    style="padding-left: 0;"
+                                >
+                                <div class="invalid-feedback">Please enter a valid email.</div>
+                            </div>
+                        </div>
 
-                <input
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    required
-                >
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock text-muted"></i></span>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    class="form-control border-start-0"
+                                    placeholder="Enter your password"
+                                    required
+                                    style="padding-left: 0;"
+                                >
+                                <div class="invalid-feedback">Please enter your password.</div>
+                            </div>
+                        </div>
 
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-dark btn-lg w-100 rounded-pill py-3 shadow mb-3">
+                            <i class="fa-solid fa-right-to-bracket me-2"></i>Sign In
+                        </button>
+
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            Don't have an account? 
+                            <a href="/user/register" class="text-primary fw-bold text-decoration-none hover-primary">
+                                Register here
+                            </a>
+                        </small>
+                    </div>
+
+                </div>
             </div>
-
-            <!-- Submit -->
-
-            <button class="btn btn-dark w-100">
-                Login
-            </button>
-
-        </form>
-
-        <div class="text-center mt-3">
-
-            <small>
-
-                Don't have an account?
-
-                <a href="/user/register">
-                    Register
-                </a>
-
-            </small>
 
         </div>
-
     </div>
-
 </section>
+
+<script>
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.validated-form')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
