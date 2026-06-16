@@ -1,4 +1,4 @@
-const { userRegisterSchema, userLoginSchema, staySchema, bookingSchema, verifyPaymentSchema } = require('../schemas');
+const { userRegisterSchema, userLoginSchema, staySchema, bookingSchema, verifyPaymentSchema, reviewSchema } = require('../schemas');
 
 const validateSchema = (schema) => {
     return (req, res, next) => {
@@ -23,3 +23,4 @@ module.exports.validateLogin = validateSchema(userLoginSchema);
 module.exports.validateStay = validateSchema(staySchema);
 module.exports.validateBooking = validateSchema(bookingSchema);
 module.exports.validateVerifyPayment = validateSchema(verifyPaymentSchema);
+module.exports.validateReview = validateSchema(reviewSchema);

@@ -32,8 +32,7 @@ const staySchema = new Schema({
     // required: true
   },
   bookings: [{ type: Schema.Types.ObjectId, ref: 'Booking' }],
-  // Error: Review model does not exist yet.
-  // reviews:  [{ type: Schema.Types.ObjectId, ref: 'Review' }]
+  reviews:  [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 
 }, { timestamps: true });
 

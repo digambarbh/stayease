@@ -8,6 +8,7 @@ const isHost = require("../middleware/isHost")
 const multer = require("multer")
 const { cloudinary, storage } = require("../cloudinary")
 const User = require('../model/user')
+const Booking = require('../model/booking')
 const { validateStay } = require("../middleware/validate");
 const upload = multer({ storage })
 router.get("/", catchAsync(async (req, res) => {
@@ -57,8 +58,33 @@ router.get('/new', checkAuth, isHost, (req, res) => {
 })
 
 router.get('/:id', catchAsync(async (req, res) => {
-    const stay = await Stay.findById(req.params.id).populate("host")
-    res.render("stay/show", { stay })
+    const stay = await Stay.findById(req.params.id)
+        .populate("host")
+        .populate({
+            path: 'reviews',
+            populate: {
+                path: 'author'
+            }
+        });
+
+    let hasBooked = false;
+    // We check req.cookies.token directly since this route doesn't have checkAuth middleware
+    if (req.cookies.token) {
+        try {
+            const jwt = require("jsonwebtoken");
+            const payload = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+            const booking = await Booking.findOne({
+                user: payload.id,
+                stay: req.params.id,
+                status: { $in: ['approved'] }
+            });
+            if (booking) hasBooked = true;
+        } catch (e) {
+            // Token might be invalid or expired, ignore
+        }
+    }
+
+    res.render("stay/show", { stay, hasBooked })
 }))
 
 

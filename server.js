@@ -116,10 +116,12 @@ app.get('/', async (req, res) => {
         destinations
     });
 })
+const reviewRoute = require("./routes/review")
+
 app.use("/user", userRoute);
 app.use("/stays", stayRoute);
-app.use("/bookings", bookingRoute)
-
+app.use("/bookings", bookingRoute);
+app.use("/stays/:id/reviews", reviewRoute);
 app.use((req, res, next) => {
     res.status(404).render('404');
 });
