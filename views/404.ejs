@@ -1,0 +1,68 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+    .not-found-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 70vh;
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .error-code {
+        font-size: 8rem;
+        font-weight: 900;
+        color: #0f172a;
+        line-height: 1;
+        margin-bottom: 1rem;
+        background: linear-gradient(to right, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .error-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 1.5rem;
+    }
+
+    .error-desc {
+        font-size: 1.2rem;
+        color: #64748b;
+        max-width: 500px;
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+    }
+
+    .btn-home {
+        background: #0f172a;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-home:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2);
+        color: white;
+    }
+</style>
+
+<div class="not-found-container">
+    <div class="error-code">404</div>
+    <h1 class="error-title">Page Not Found</h1>
+    <p class="error-desc">Oops! The page you're looking for doesn't exist or has been moved. Let's get you back on track.</p>
+    <a href="/" class="btn-home">
+        <span>🏠</span> Back to Home
+    </a>
+</div>

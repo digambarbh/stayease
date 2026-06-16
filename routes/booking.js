@@ -9,25 +9,52 @@ const router = express.Router()
 const checkAuth = require("../middleware/auth")
 const User = require("../model/user")
 const razorpay = require("../utility/razorpay")
+const catchAsync = require("../utility/catchAsync")
+const { validateBooking, validateVerifyPayment } = require("../middleware/validate");
 
 
-router.get("/new/:id", checkAuth, async (req, res) => {
+router.get("/new/:id", checkAuth, catchAsync(async (req, res) => {
     const { id } = req.params
     const stay = await Stay.findById(id)
-    res.render("booking/booking", { stay })
-})
+
+    const existingBookings = await Booking.find({
+        stay: id,
+        status: { $nin: ['cancelled', 'rejected'] }
+    }).select('checkIn checkOut');
+    
+    const bookedRanges = JSON.stringify(existingBookings.map(b => ({
+        checkIn: b.checkIn,
+        checkOut: b.checkOut
+    })));
+
+    res.render("booking/booking", { stay, bookedRanges })
+}))
 
 
 
 
 
 
-router.post("/:id", checkAuth, async (req, res) => {
+router.post("/:id", checkAuth, validateBooking, catchAsync(async (req, res) => {
     const { id } = req.params
     const stay = await Stay.findById(id)
     const { guests } = req.body
     const checkIn = new Date(req.body.checkIn)
     const checkOut = new Date(req.body.checkOut)
+
+    const conflictingBooking = await Booking.findOne({
+        stay: id,
+        status: { $nin: ['cancelled', 'rejected'] },
+        $and: [
+            { checkIn: { $lt: checkOut } },
+            { checkOut: { $gt: checkIn } }
+        ]
+    });
+    
+    if (conflictingBooking) {
+        res.cookie("flash", { type: "danger", message: "These dates are already booked. Please select different dates." });
+        return res.redirect(`/bookings/new/${id}`);
+    }
     const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))
     const totalPrice = nights * stay.price
     const booking = new Booking({ checkIn, checkOut, guests, totalPrice, nights })
@@ -40,7 +67,7 @@ router.post("/:id", checkAuth, async (req, res) => {
     await booking.save()
     res.cookie("flash",{type:"success",message:"Stay booked . Happy Journey"})
     res.redirect("/user/my/bookings")
-})
+}))
 
 
 // router.post("/:id/pay", checkAuth, async (req, res) => {
@@ -77,7 +104,7 @@ router.post("/:id", checkAuth, async (req, res) => {
 
 
 
-router.post("/verify", checkAuth, async (req, res) => {
+router.post("/verify", checkAuth, validateVerifyPayment, catchAsync(async (req, res) => {
     const {
         razorpay_order_id,
         razorpay_payment_id,
@@ -96,6 +123,22 @@ router.post("/verify", checkAuth, async (req, res) => {
 
     if (generatedSignature !== razorpay_signature) {
         return res.status(400).json({ success: false, message: "Payment verification failed" })
+    }
+
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+
+    const conflictingBooking = await Booking.findOne({
+        stay: stayId,
+        status: { $nin: ['cancelled', 'rejected'] },
+        $and: [
+            { checkIn: { $lt: checkOutDate } },
+            { checkOut: { $gt: checkInDate } }
+        ]
+    });
+    
+    if (conflictingBooking) {
+        return res.status(400).json({ success: false, message: "These dates were just booked by someone else." });
     }
 
     const stay = await Stay.findById(stayId)
@@ -127,6 +170,6 @@ router.post("/verify", checkAuth, async (req, res) => {
     }
 
     res.json({ success: true })
-})
+}))
 
 module.exports = router

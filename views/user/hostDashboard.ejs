@@ -1,0 +1,262 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+    body {
+        background-color: #f8fafc;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 1rem;
+    }
+
+    .dashboard-header {
+        margin-bottom: 3rem;
+    }
+
+    .dashboard-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem;
+    }
+
+    .dashboard-subtitle {
+        font-size: 1.1rem;
+        color: #64748b;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid #e2e8f0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(to right, #3b82f6, #8b5cf6);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .stat-card:hover::before {
+        opacity: 1;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .icon-blue { background: #eff6ff; color: #3b82f6; }
+    .icon-green { background: #f0fdf4; color: #22c55e; }
+    .icon-purple { background: #faf5ff; color: #a855f7; }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.95rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    /* Stays Breakdown */
+    .stays-section {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+    }
+
+    .stays-section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 1.5rem;
+    }
+
+    .stays-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .stays-table th {
+        text-align: left;
+        padding: 1rem;
+        background: #f8fafc;
+        color: #475569;
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .stays-table th:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+    .stays-table th:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+
+    .stays-table td {
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid #e2e8f0;
+        color: #1e293b;
+        vertical-align: middle;
+    }
+
+    .stays-table tr:last-child td { border-bottom: none; }
+
+    .stay-name {
+        font-weight: 600;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .stay-img-placeholder {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .stay-img-placeholder img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.25em 0.75em;
+        font-size: 0.875em;
+        font-weight: 600;
+        border-radius: 9999px;
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .badge-primary { background: #eff6ff; color: #2563eb; }
+    .badge-success { background: #f0fdf4; color: #16a34a; }
+
+    @media (max-width: 768px) {
+        .stays-table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Host Dashboard</h1>
+        <p class="dashboard-subtitle">Overview of your properties and earnings</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon icon-blue">🏠</div>
+            <div class="stat-value"><%= totalStays %></div>
+            <div class="stat-label">Total Stays Owned</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon icon-purple">📅</div>
+            <div class="stat-value"><%= totalBookings %></div>
+            <div class="stat-label">Total Bookings</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon icon-green">💰</div>
+            <div class="stat-value">₹<%= totalEarnings.toLocaleString('en-IN') %></div>
+            <div class="stat-label">Total Earnings</div>
+        </div>
+    </div>
+
+    <div class="stays-section">
+        <h2 class="stays-section-title">Stays Breakdown</h2>
+        
+        <% if (stayStats && stayStats.length > 0) { %>
+            <table class="stays-table">
+                <thead>
+                    <tr>
+                        <th>Stay</th>
+                        <th>Type</th>
+                        <th>Bookings</th>
+                        <th>Earnings</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let stat of stayStats) { %>
+                        <tr>
+                            <td>
+                                <div class="stay-name">
+                                    <div class="stay-img-placeholder">
+                                        <% if (stat.stay.images && stat.stay.images.length > 0) { %>
+                                            <img src="<%= stat.stay.images[0].url %>" alt="<%= stat.stay.name %>">
+                                        <% } else { %>
+                                            🏡
+                                        <% } %>
+                                    </div>
+                                    <%= stat.stay.name %>
+                                </div>
+                            </td>
+                            <td><span class="badge"><%= stat.stay.type || 'N/A' %></span></td>
+                            <td><span class="badge badge-primary"><%= stat.bookingCount %></span></td>
+                            <td><span class="badge badge-success">₹<%= stat.earnings.toLocaleString('en-IN') %></span></td>
+                            <td>
+                                <a href="/user/host/stay/<%= stat.stay._id %>/bookings" class="btn btn-sm btn-primary" style="background: #0f172a; border-color: #0f172a; border-radius: 8px;">View Bookings</a>
+                                <a href="/stays/<%= stat.stay._id %>" class="btn btn-sm btn-outline-dark" style="border-radius: 8px; margin-left: 8px;">View Stay</a>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <div class="text-center py-5">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+                <h3 style="color: #475569; font-weight: 600;">No stays listed yet</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Start hosting to see your statistics here.</p>
+                <a href="/stays/new" class="btn btn-primary" style="background: #0f172a; border-color: #0f172a; border-radius: 8px; padding: 10px 20px;">List a Stay</a>
+            </div>
+        <% } %>
+    </div>
+</div>

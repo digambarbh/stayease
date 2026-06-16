@@ -1,0 +1,205 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+    body {
+        background-color: #f8fafc;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .bookings-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 1rem;
+    }
+
+    .bookings-header {
+        margin-bottom: 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .bookings-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem;
+    }
+
+    .bookings-subtitle {
+        font-size: 1.1rem;
+        color: #64748b;
+    }
+
+    .btn-back {
+        background: white;
+        color: #0f172a;
+        border: 1px solid #cbd5e1;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .btn-back:hover {
+        background: #f1f5f9;
+        color: #0f172a;
+    }
+
+    .booking-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        transition: transform 0.2s ease;
+    }
+    
+    .booking-card:hover {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-color: #cbd5e1;
+    }
+
+    .booking-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    .detail-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .detail-group:last-child {
+        margin-bottom: 0;
+    }
+
+    .detail-label {
+        font-size: 0.875rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .detail-value {
+        font-size: 1.125rem;
+        color: #0f172a;
+        font-weight: 500;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.35em 0.85em;
+        font-size: 0.875em;
+        font-weight: 600;
+        border-radius: 9999px;
+    }
+
+    .status-pending { background: #fef9c3; color: #ca8a04; }
+    .status-approved { background: #dcfce7; color: #16a34a; }
+    .status-rejected { background: #fee2e2; color: #dc2626; }
+    .status-cancelled { background: #f1f5f9; color: #475569; }
+
+    .payment-pending { background: #fef9c3; color: #ca8a04; }
+    .payment-paid { background: #dcfce7; color: #16a34a; }
+    .payment-refunded { background: #f1f5f9; color: #475569; }
+
+    .empty-state {
+        text-align: center;
+        padding: 5rem 2rem;
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px dashed #cbd5e1;
+    }
+</style>
+
+<div class="bookings-container">
+    <div class="bookings-header">
+        <div>
+            <h1 class="bookings-title">Bookings for <%= stay.name %></h1>
+            <p class="bookings-subtitle">Manage guests, check-in dates, and verify payments.</p>
+        </div>
+        <a href="/user/host/dashboard" class="btn-back">← Back to Dashboard</a>
+    </div>
+
+    <% if (bookings && bookings.length > 0) { %>
+        <% for(let booking of bookings) { %>
+            <div class="booking-card">
+                <div class="booking-grid">
+                    <!-- Guest Info -->
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem;">Guest Details</h3>
+                        <div class="detail-group">
+                            <div class="detail-label">Name</div>
+                            <div class="detail-value"><%= booking.user ? booking.user.username : 'Unknown' %></div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value"><a href="mailto:<%= booking.user ? booking.user.email : '' %>" style="color: #3b82f6; text-decoration: none;"><%= booking.user ? booking.user.email : 'N/A' %></a></div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Phone</div>
+                            <div class="detail-value"><a href="tel:<%= booking.user ? booking.user.phone : '' %>" style="color: #0f172a; text-decoration: none;"><%= booking.user ? booking.user.phone : 'N/A' %></a></div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Info -->
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem;">Stay Details</h3>
+                        <div class="detail-group">
+                            <div class="detail-label">Dates</div>
+                            <div class="detail-value">
+                                <%= new Date(booking.checkIn).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %> - 
+                                <%= new Date(booking.checkOut).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                            </div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Guests & Nights</div>
+                            <div class="detail-value"><%= booking.guests %> Guests · <%= booking.nights %> Nights</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Booking Status</div>
+                            <div class="detail-value">
+                                <span class="badge status-<%= booking.status || 'pending' %>"><%= (booking.status || 'pending').toUpperCase() %></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Info -->
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem;">Payment Information</h3>
+                        <div class="detail-group">
+                            <div class="detail-label">Total Price</div>
+                            <div class="detail-value" style="font-weight: 700; color: #16a34a;">₹<%= (booking.totalPrice || 0).toLocaleString('en-IN') %></div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Payment Status</div>
+                            <div class="detail-value">
+                                <span class="badge payment-<%= booking.payment && booking.payment.status ? booking.payment.status : 'pending' %>"><%= (booking.payment && booking.payment.status ? booking.payment.status : 'pending').toUpperCase() %></span>
+                            </div>
+                        </div>
+                        <% if (booking.payment && booking.payment.razorpayPaymentId) { %>
+                            <div class="detail-group">
+                                <div class="detail-label">Transaction ID</div>
+                                <div class="detail-value" style="font-family: monospace; font-size: 0.9rem;"><%= booking.payment.razorpayPaymentId %></div>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    <% } else { %>
+        <div class="empty-state">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">📭</div>
+            <h3 style="color: #0f172a; font-weight: 700; font-size: 1.5rem; margin-bottom: 0.5rem;">No bookings yet</h3>
+            <p style="color: #64748b; font-size: 1.1rem;">You don't have any reservations for this stay.</p>
+        </div>
+    <% } %>
+</div>

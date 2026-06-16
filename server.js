@@ -1,6 +1,7 @@
 require("dotenv").config()
 const express = require("express")
 const app = express()
+app.set('trust proxy', 1);
 const path = require('path')
 const connectDb = require('./db/db')
 const ejsmate = require("ejs-mate")
@@ -13,8 +14,34 @@ const User = require("./model/user")
 const Blacklist = require("./model/blacklist")
 const bookingRoute = require("./routes/booking")
 const stay = require("./model/stay")
+const helmet = require("helmet")
+const mongoSanitize = require("express-mongo-sanitize");
 connectDb()
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            connectSrc: ["'self'", "https://api.maptiler.com"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://unpkg.com", "https://cdn.jsdelivr.net", "https://kit.fontawesome.com"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com", "https://cdn.jsdelivr.net", "https://kit.fontawesome.com", "https://fonts.googleapis.com"],
+            workerSrc: ["'self'", "blob:"],
+            childSrc: ["blob:"],
+            objectSrc: [],
+            imgSrc: ["'self'", "blob:", "data:", "https:"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com", "https://kit.fontawesome.com", "https://cdnjs.cloudflare.com", "https://ka-f.fontawesome.com"]
+        }
+    },
+    crossOriginEmbedderPolicy: false
+}));
 
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+app.use((req, res, next) => {
+    if (req.body) mongoSanitize.sanitize(req.body, { replaceWith: '_' });
+    if (req.query) mongoSanitize.sanitize(req.query, { replaceWith: '_' });
+    if (req.params) mongoSanitize.sanitize(req.params, { replaceWith: '_' });
+    next();
+});
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.engine('ejs', ejsmate)
@@ -91,18 +118,25 @@ app.use("/user", userRoute);
 app.use("/stays", stayRoute);
 app.use("/bookings", bookingRoute)
 
-
-
-
-
-
-
-
-
-
+app.use((req, res, next) => {
+    res.status(404).render('404');
+});
 //universal error handler 
 app.use((error, req, res, next) => {
-    res.status(500).send(error.message)
+    console.error(error.stack);
+    
+    if (req.xhr || (req.headers.accept && req.headers.accept.includes('application/json'))) {
+        return res.status(500).json({ success: false, message: error.message || "An error occurred" });
+    }
+
+    if (error.name === 'CastError') {
+        res.cookie("flash", { type: "danger", message: "Invalid item requested." });
+    } else {
+        res.cookie("flash", { type: "danger", message: "Something went wrong!" });
+    }
+
+    const redirectUrl = req.get('referer') || '/';
+    res.redirect(redirectUrl);
 })
 
 app.listen(process.env.SERVER_PORT, () => {

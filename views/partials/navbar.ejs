@@ -730,12 +730,12 @@
 </style>
 
 <!-- ════ NAVBAR ════ -->
-<nav class="se-navbar">
+<nav class="se-navbar" aria-label="Main Navigation">
 
   <div class="se-nav-top">
 
     <!-- Logo -->
-    <a class="se-logo" href="/">
+    <a class="se-logo" href="/" aria-label="StayEase Home">
       <svg width="24" height="24" viewBox="0 0 32 32" fill="currentColor">
         <path
           d="M16 2C10.48 2 6 6.48 6 12c0 7.5 10 18 10 18s10-10.5 10-18c0-5.52-4.48-10-10-10zm0 13.5c-1.93 0-3.5-1.57-3.5-3.5S14.07 8.5 16 8.5s3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
@@ -746,7 +746,7 @@
     <!-- Center: Filter toggle + Nav links -->
     <div style="display:flex;align-items:center;gap:8px;flex:1;justify-content:flex-end;flex-shrink:0;">
 
-      <button class="se-filter-toggle" id="seFilterToggle" type="button" aria-label="Filters">
+      <button class="se-filter-toggle" id="seFilterToggle" type="button" aria-label="Toggle Filters" aria-expanded="false" aria-controls="seFilterPanel">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
           <line x1="4" y1="6" x2="20" y2="6" />
           <line x1="8" y1="12" x2="16" y2="12" />
@@ -768,7 +768,7 @@
 
         <!-- All Stays dropdown -->
         <div class="se-dropdown">
-          <button class="se-dropdown-trigger" type="button">
+          <button class="se-dropdown-trigger" type="button" aria-haspopup="true" aria-expanded="false">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
               <rect x="3" y="3" width="7" height="7" rx="1" />
               <rect x="14" y="3" width="7" height="7" rx="1" />
@@ -845,7 +845,7 @@
               <% } else { %>
 
                 <div class="se-user-dropdown">
-                  <div class="se-user-pill" tabindex="0">
+                  <button class="se-user-pill" aria-haspopup="true" aria-expanded="false" aria-label="User Menu">
                     My Account
                     <div class="se-avatar">
                       <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24">
@@ -853,7 +853,7 @@
                           d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
                       </svg>
                     </div>
-                  </div>
+                  </button>
                   <div class="se-user-dropdown-menu">
                     <a href="/user/profile" class="se-user-item">
                       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
@@ -910,7 +910,7 @@
     </div>
 
     <!-- Mobile Toggle -->
-    <button class="se-mobile-toggle" id="seToggle" type="button" aria-label="Menu">
+    <button class="se-mobile-toggle" id="seToggle" type="button" aria-label="Toggle Mobile Menu" aria-expanded="false" aria-controls="seDrawer">
       <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path d="M3 12h18M3 6h18M3 18h18" />
       </svg>
@@ -1123,6 +1123,13 @@
       Wishlist
     </a>
     <% if (isLoggedIn) { %>
+    <a href="/user/profile" class="se-drawer-link">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+      </svg>
+      Profile
+    </a>
     <a href="/user/my/bookings" class="se-drawer-link">
       <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
         <rect x="3" y="4" width="18" height="18" rx="2" />
@@ -1134,7 +1141,7 @@
 
     <!-- Mobile Filters -->
     <div class="se-drawer-sep"></div>
-    <button class="se-mobile-filter-toggle" id="seMobileFilterToggle" type="button">
+    <button class="se-mobile-filter-toggle" id="seMobileFilterToggle" type="button" aria-expanded="false" aria-controls="seMobileFilterBody">
       <span style="display:flex;align-items:center;gap:8px;">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
           <line x1="4" y1="6" x2="20" y2="6" />
@@ -1278,8 +1285,9 @@
     }
 
     filterToggle.addEventListener('click', () => {
-      filterPanel.classList.toggle('open');
+      const isOpen = filterPanel.classList.toggle('open');
       filterToggle.classList.toggle('active');
+      filterToggle.setAttribute('aria-expanded', isOpen);
     });
 
     filterFields.forEach(f => {
@@ -1289,15 +1297,28 @@
     });
 
     chips.forEach(chip => {
-      chip.addEventListener('click', () => {
+      chip.setAttribute('role', 'checkbox');
+      chip.setAttribute('tabindex', '0');
+      chip.setAttribute('aria-checked', 'false');
+
+      const toggleChip = () => {
         const val = chip.dataset.value;
-        chip.classList.toggle('selected');
-        if (chip.classList.contains('selected')) {
+        const isSelected = chip.classList.toggle('selected');
+        chip.setAttribute('aria-checked', isSelected);
+        if (isSelected) {
           if (!selectedAmenities.includes(val)) selectedAmenities.push(val);
         } else {
           selectedAmenities = selectedAmenities.filter(a => a !== val);
         }
         updateBadgeAndTags();
+      };
+
+      chip.addEventListener('click', toggleChip);
+      chip.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleChip();
+        }
       });
     });
 
@@ -1309,13 +1330,15 @@
     });
 
     mobileToggle.addEventListener('click', () => {
-      drawer.classList.toggle('open');
+      const isOpen = drawer.classList.toggle('open');
+      mobileToggle.setAttribute('aria-expanded', isOpen);
     });
 
     if(mobileFilterToggle && mobileFilterBody && mobileChevron) {
       mobileFilterToggle.addEventListener('click', () => {
-        mobileFilterBody.classList.toggle('open');
-        mobileChevron.style.transform = mobileFilterBody.classList.contains('open') ? 'rotate(180deg)' : '';
+        const isOpen = mobileFilterBody.classList.toggle('open');
+        mobileChevron.style.transform = isOpen ? 'rotate(180deg)' : '';
+        mobileFilterToggle.setAttribute('aria-expanded', isOpen);
       });
     }
   })();

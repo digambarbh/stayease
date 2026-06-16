@@ -1,143 +1,604 @@
+const mongoose = require("mongoose");
+const Stay = require("../model/stay");
+require("dotenv").config();
 
-const mongoose = require("mongoose")
-const Stay = require("../model/stay")
-require('dotenv').config()
-mongoose.connect(process.env.DATABASE_URL)
-const HOST_ID = new mongoose.Types.ObjectId('6a2cf5ed7bfabd297190417e');
+mongoose.connect(process.env.DATABASE_URL);
+
+const HOST_ID = new mongoose.Types.ObjectId("6a30f97a87e092782de23250");
 
 const stays = [
   {
-    name: "Sea Breeze Villa",
-    description: "Luxury villa with a private pool and stunning sea views.",
+    name: "Sea Breeze Villa Goa",
+    description: "Luxury villa with a private pool and stunning sea views along the Konkan coast.",
+    location: "Calangute, Goa",
     price: 8500,
     capacity: 6,
-    geometry: {
-      lat: 15.2993,
-      lng: 74.1240
-    },
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-        filename: "villa1.jpg"
-      }
-    ],
+    geometry: { lat: 15.5449, lng: 73.7516 },
+    images: [{ url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6", filename: "villa1.jpg" }],
     type: "villa",
-    isAvailable: true
+    isAvailable: true,
+    host: HOST_ID,
   },
   {
-    name: "Mountain View Cabin",
-    description: "Cozy wooden cabin surrounded by mountains and forests.",
-    price: 4200,
+    name: "Pune Koregaon Park Apartment",
+    description: "Stylish apartment in the heart of Pune, walking distance to Koregaon Park cafes and restaurants.",
+    location: "Koregaon Park, Pune, Maharashtra",
+    price: 3200,
+    capacity: 3,
+    geometry: { lat: 18.5362, lng: 73.8973 },
+    images: [{ url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688", filename: "pune_apt.jpg" }],
+    type: "apartment",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Mumbai Bandra Sea View Suite",
+    description: "Premium suite with breathtaking views of the Arabian Sea in upscale Bandra West.",
+    location: "Bandra West, Mumbai, Maharashtra",
+    price: 11000,
+    capacity: 2,
+    geometry: { lat: 19.0596, lng: 72.8295 },
+    images: [{ url: "https://images.unsplash.com/photo-1566073771259-6a8506099945", filename: "mumbai_suite.jpg" }],
+    type: "hotel",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Lonavala Misty Cabin",
+    description: "Cozy wooden cabin surrounded by mist-covered Sahyadri hills and lush greenery.",
+    location: "Lonavala, Maharashtra",
+    price: 4500,
     capacity: 4,
-    geometry: {
-      lat: 32.2432,
-      lng: 77.1892
-    },
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1448375240586-882707db888b",
-        filename: "cabin1.jpg"
-      }
-    ],
+    geometry: { lat: 18.7481, lng: 73.4072 },
+    images: [{ url: "https://images.unsplash.com/photo-1448375240586-882707db888b", filename: "lonavala_cabin.jpg" }],
     type: "cabin",
-    isAvailable: true
+    isAvailable: true,
+    host: HOST_ID,
   },
   {
-    name: "City Center Apartment",
-    description: "Modern apartment located in the heart of the city.",
+    name: "Mahabaleshwar Hilltop Cottage",
+    description: "Charming cottage with panoramic valley views, close to Venna Lake and strawberry farms.",
+    location: "Mahabaleshwar, Maharashtra",
+    price: 5500,
+    capacity: 5,
+    geometry: { lat: 17.9239, lng: 73.6586 },
+    images: [{ url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750", filename: "mahabaleshwar_cottage.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Alibag Beachside Villa",
+    description: "Stunning villa steps from Alibag Beach, perfect for weekend getaways from Mumbai.",
+    location: "Alibag, Raigad, Maharashtra",
+    price: 9000,
+    capacity: 8,
+    geometry: { lat: 18.6414, lng: 72.8722 },
+    images: [{ url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c", filename: "alibag_villa.jpg" }],
+    type: "villa",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Nashik Vineyard Cottage",
+    description: "Romantic stay amidst sprawling vineyards in the wine capital of India.",
+    location: "Nashik, Maharashtra",
+    price: 6500,
+    capacity: 4,
+    geometry: { lat: 19.9975, lng: 73.7898 },
+    images: [{ url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4", filename: "nashik_vineyard.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Aurangabad Heritage Haveli",
+    description: "Restored haveli near Ajanta and Ellora caves with traditional Marathwada decor.",
+    location: "Aurangabad, Maharashtra",
+    price: 7000,
+    capacity: 6,
+    geometry: { lat: 19.8762, lng: 75.3433 },
+    images: [{ url: "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72", filename: "aurangabad_haveli.jpg" }],
+    type: "hotel",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Kolhapur Palace Retreat",
+    description: "Royal-inspired boutique stay near the iconic Mahalaxmi Temple with regal ambiance.",
+    location: "Kolhapur, Maharashtra",
+    price: 8000,
+    capacity: 5,
+    geometry: { lat: 16.705, lng: 74.2433 },
+    images: [{ url: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4", filename: "kolhapur_retreat.jpg" }],
+    type: "hotel",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Konkan Mango Farm Cottage",
+    description: "Rustic cottage on a mango farm in Devgad, ideal for the summer harvest season.",
+    location: "Devgad, Sindhudurg, Maharashtra",
+    price: 3800,
+    capacity: 4,
+    geometry: { lat: 16.3742, lng: 73.3772 },
+    images: [{ url: "https://images.unsplash.com/photo-1504701954957-2010ec3bcec1", filename: "konkan_farm.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Ratnagiri Cliff Villa",
+    description: "Dramatic cliff-edge villa overlooking the Arabian Sea with private beach access.",
+    location: "Ratnagiri, Maharashtra",
+    price: 10500,
+    capacity: 7,
+    geometry: { lat: 16.9944, lng: 73.3 },
+    images: [{ url: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2", filename: "ratnagiri_villa.jpg" }],
+    type: "villa",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Igatpuri Forest Cabin",
+    description: "Secluded cabin inside dense Sahyadri forest, perfect for nature lovers and meditation.",
+    location: "Igatpuri, Nashik, Maharashtra",
+    price: 3500,
+    capacity: 3,
+    geometry: { lat: 19.6984, lng: 73.5585 },
+    images: [{ url: "https://images.unsplash.com/photo-1501854140801-50d01698950b", filename: "igatpuri_cabin.jpg" }],
+    type: "cabin",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Khandala Valley Apartment",
+    description: "Modern apartment with misty valley views, ideal for remote work and weekend escapes.",
+    location: "Khandala, Maharashtra",
+    price: 4000,
+    capacity: 3,
+    geometry: { lat: 18.7643, lng: 73.3875 },
+    images: [{ url: "https://images.unsplash.com/photo-1493809842364-78817add7ffb", filename: "khandala_apt.jpg" }],
+    type: "apartment",
+    isAvailable: false,
+    host: HOST_ID,
+  },
+  {
+    name: "Panchgani Strawberry Farm Stay",
+    description: "Cozy stay on a working strawberry farm with breathtaking plateau views.",
+    location: "Panchgani, Satara, Maharashtra",
+    price: 4800,
+    capacity: 5,
+    geometry: { lat: 17.9249, lng: 73.8009 },
+    images: [{ url: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b", filename: "panchgani_farm.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Nagpur Central Apartment",
+    description: "Comfortable apartment in central Nagpur, close to Zero Mile and Deekshabhoomi.",
+    location: "Sitabuldi, Nagpur, Maharashtra",
+    price: 2800,
+    capacity: 3,
+    geometry: { lat: 21.1458, lng: 79.0882 },
+    images: [{ url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2", filename: "nagpur_apt.jpg" }],
+    type: "apartment",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Tapola Lakeside Cottage",
+    description: "Serene cottage on the banks of Shivsagar Lake, called the Mini Kashmir of Maharashtra.",
+    location: "Tapola, Satara, Maharashtra",
+    price: 5200,
+    capacity: 5,
+    geometry: { lat: 17.7492, lng: 73.8193 },
+    images: [{ url: "https://images.unsplash.com/photo-1439066615861-d1af74d74000", filename: "tapola_lake.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Matheran Heritage Bungalow",
+    description: "Colonial-era bungalow in car-free Matheran hill station with forest walks outside.",
+    location: "Matheran, Raigad, Maharashtra",
+    price: 6200,
+    capacity: 6,
+    geometry: { lat: 18.9787, lng: 73.2703 },
+    images: [{ url: "https://images.unsplash.com/photo-1571896349842-33c89424de2d", filename: "matheran_bungalow.jpg" }],
+    type: "hotel",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Murud Janjira Beach Villa",
+    description: "Beachfront villa with dramatic views of the legendary Murud Janjira sea fort.",
+    location: "Murud, Raigad, Maharashtra",
+    price: 8800,
+    capacity: 7,
+    geometry: { lat: 18.3001, lng: 72.9607 },
+    images: [{ url: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9", filename: "murud_villa.jpg" }],
+    type: "villa",
+    isAvailable: false,
+    host: HOST_ID,
+  },
+  {
+    name: "Solapur Pilgrim Guesthouse",
+    description: "Peaceful guesthouse near Pandharpur with traditional Varkari hospitality.",
+    location: "Pandharpur, Solapur, Maharashtra",
+    price: 1800,
+    capacity: 4,
+    geometry: { lat: 17.6599, lng: 75.9064 },
+    images: [{ url: "https://images.unsplash.com/photo-1611892440504-42a792e24d32", filename: "solapur_guest.jpg" }],
+    type: "hotel",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Akola Heritage Homestay",
+    description: "Traditional family homestay in Vidarbha with home-cooked Maharashtrian meals included.",
+    location: "Akola, Maharashtra",
+    price: 2200,
+    capacity: 4,
+    geometry: { lat: 20.7002, lng: 77.0082 },
+    images: [{ url: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b", filename: "akola_home.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Bhandardara Riverside Camp",
+    description: "Luxury tent stay on the banks of Pravara River near Wilson Dam and Randha Falls.",
+    location: "Bhandardara, Ahmednagar, Maharashtra",
+    price: 3600,
+    capacity: 4,
+    geometry: { lat: 19.5333, lng: 73.75 },
+    images: [{ url: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4", filename: "bhandardara_camp.jpg" }],
+    type: "cabin",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Dapoli Konkan Bungalow",
+    description: "Classic red-tiled Konkan bungalow amidst coconut groves near Harnai Beach.",
+    location: "Dapoli, Ratnagiri, Maharashtra",
+    price: 5800,
+    capacity: 6,
+    geometry: { lat: 17.7594, lng: 73.1868 },
+    images: [{ url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c", filename: "dapoli_bungalow.jpg" }],
+    type: "villa",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Amravati Melghat Forest Lodge",
+    description: "Wildlife lodge on the edge of Melghat Tiger Reserve deep in Satpura ranges.",
+    location: "Chikhaldara, Amravati, Maharashtra",
+    price: 7500,
+    capacity: 5,
+    geometry: { lat: 21.3706, lng: 77.7498 },
+    images: [{ url: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800", filename: "amravati_lodge.jpg" }],
+    type: "cabin",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Lavasa Lakefront Apartment",
+    description: "Contemporary apartment in the planned hill city of Lavasa with private lakefront access.",
+    location: "Lavasa, Pune, Maharashtra",
+    price: 5500,
+    capacity: 4,
+    geometry: { lat: 18.4077, lng: 73.5118 },
+    images: [{ url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00", filename: "lavasa_apt.jpg" }],
+    type: "apartment",
+    isAvailable: false,
+    host: HOST_ID,
+  },
+  {
+    name: "Ganpatipule Temple Cottage",
+    description: "Beachside cottage in Ganpatipule, steps from the famous swayambhu Ganapati temple.",
+    location: "Ganpatipule, Ratnagiri, Maharashtra",
+    price: 4200,
+    capacity: 5,
+    geometry: { lat: 17.1439, lng: 73.2644 },
+    images: [{ url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e", filename: "ganpatipule_cottage.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Nanded Godavari Riverside Hotel",
+    description: "Comfortable hotel on the banks of Godavari river near the sacred Hazur Sahib Gurudwara.",
+    location: "Nanded, Maharashtra",
     price: 3000,
     capacity: 3,
-    geometry: {
-      lat: 18.5204,
-      lng: 73.8567
-    },
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
-        filename: "apartment1.jpg"
-      }
-    ],
-    type: "apartment",
-    isAvailable: true
-  },
-  {
-    name: "Lakeside Cottage",
-    description: "Peaceful cottage overlooking a beautiful lake.",
-    price: 5000,
-    capacity: 5,
-    geometry: {
-      lat: 19.0760,
-      lng: 72.8777
-    },
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-        filename: "cottage1.jpg"
-      }
-    ],
-    type: "cottage",
-    isAvailable: false
-  },
-  {
-    name: "Royal Palace Hotel",
-    description: "5-star hotel offering premium rooms and world-class service.",
-    price: 12000,
-    capacity: 2,
-    geometry: {
-      lat: 28.6139,
-      lng: 77.2090
-    },
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
-        filename: "hotel1.jpg"
-      }
-    ],
+    geometry: { lat: 19.1383, lng: 77.3212 },
+    images: [{ url: "https://images.unsplash.com/photo-1551882547-ff40c63fe1d8", filename: "nanded_hotel.jpg" }],
     type: "hotel",
-    isAvailable: true
+    isAvailable: true,
+    host: HOST_ID,
   },
   {
-    name: "Hilltop Villa Retreat",
-    description: "Elegant villa with panoramic hill views and spacious gardens.",
-    price: 9500,
-    capacity: 8,
-    geometry: {
-      lat: 17.3850,
-      lng: 78.4867
-    },
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-        filename: "villa2.jpg"
-      }
-    ],
+    name: "Kaas Plateau Eco Homestay",
+    description: "Eco-homestay near Kaas Plateau, UNESCO biosphere reserve famed for seasonal wildflowers.",
+    location: "Kaas, Satara, Maharashtra",
+    price: 3400,
+    capacity: 4,
+    geometry: { lat: 17.6805, lng: 73.9858 },
+    images: [{ url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b", filename: "kaas_homestay.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Wai Krishna River Retreat",
+    description: "Peaceful retreat beside the Krishna river ghats in the heritage town of Wai.",
+    location: "Wai, Satara, Maharashtra",
+    price: 4600,
+    capacity: 5,
+    geometry: { lat: 17.9557, lng: 73.8978 },
+    images: [{ url: "https://images.unsplash.com/photo-1455763916899-e8b50eca9967", filename: "wai_retreat.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Thane Creek View Apartment",
+    description: "Modern 2BHK apartment with creek and mangrove views in the twin city of Mumbai.",
+    location: "Thane West, Thane, Maharashtra",
+    price: 4100,
+    capacity: 4,
+    geometry: { lat: 19.2183, lng: 72.9781 },
+    images: [{ url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267", filename: "thane_apt.jpg" }],
+    type: "apartment",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Chiplun Vashishthi Riverside Cottage",
+    description: "Scenic riverside cottage on Vashishthi River surrounded by dense Konkan forests.",
+    location: "Chiplun, Ratnagiri, Maharashtra",
+    price: 4900,
+    capacity: 5,
+    geometry: { lat: 17.5326, lng: 73.5133 },
+    images: [{ url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e", filename: "chiplun_cottage.jpg" }],
+    type: "cottage",
+    isAvailable: false,
+    host: HOST_ID,
+  },
+  {
+    name: "Sindhudurg Fort View Villa",
+    description: "Luxury villa with dramatic views of Sindhudurg sea fort built by Chhatrapati Shivaji Maharaj.",
+    location: "Sindhudurg, Maharashtra",
+    price: 9200,
+    capacity: 7,
+    geometry: { lat: 16.0397, lng: 73.4997 },
+    images: [{ url: "https://images.unsplash.com/photo-1613490493576-7fde63acd811", filename: "sindhudurg_villa.jpg" }],
     type: "villa",
-    isAvailable: true
-  }
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Palghar Sunrise Beach Cottage",
+    description: "Breezy beach stay in Palghar district with sunrise views and fresh seafood nearby.",
+    location: "Palghar, Maharashtra",
+    price: 3300,
+    capacity: 3,
+    geometry: { lat: 19.6967, lng: 72.765 },
+    images: [{ url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19", filename: "palghar_beach.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Osmanabad Countryside Farm Stay",
+    description: "Sprawling farm stay in Osmanabad with bullock cart rides and organic farming experience.",
+    location: "Osmanabad, Maharashtra",
+    price: 2600,
+    capacity: 6,
+    geometry: { lat: 18.1769, lng: 76.0439 },
+    images: [{ url: "https://images.unsplash.com/photo-1500382017468-9049fed747ef", filename: "osmanabad_farm.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Jalgaon Banana Plantation Stay",
+    description: "Unique agro-tourism stay inside a banana plantation in the heart of Khandesh region.",
+    location: "Jalgaon, Maharashtra",
+    price: 2400,
+    capacity: 4,
+    geometry: { lat: 21.0077, lng: 75.5626 },
+    images: [{ url: "https://images.unsplash.com/photo-1571091718767-18b5b1457add", filename: "jalgaon_farm.jpg" }],
+    type: "cottage",
+    isAvailable: false,
+    host: HOST_ID,
+  },
+  {
+    name: "Shirdi Pilgrim Comfort Hotel",
+    description: "Comfortable hotel 5 minutes from Sai Baba Samadhi Mandir, ideal for pilgrims.",
+    location: "Shirdi, Ahmednagar, Maharashtra",
+    price: 2500,
+    capacity: 3,
+    geometry: { lat: 19.7675, lng: 74.4769 },
+    images: [{ url: "https://images.unsplash.com/photo-1568084680786-a84f91d1153c", filename: "shirdi_hotel.jpg" }],
+    type: "hotel",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Trimbakeshwar Forest Retreat",
+    description: "Retreat near Trimbakeshwar Jyotirlinga with Brahmagiri mountain trekking access.",
+    location: "Trimbakeshwar, Nashik, Maharashtra",
+    price: 4300,
+    capacity: 5,
+    geometry: { lat: 19.9344, lng: 73.5283 },
+    images: [{ url: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071", filename: "trimbak_retreat.jpg" }],
+    type: "cabin",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Harihareshwar Sea Temple Cottage",
+    description: "Beachside stay near the ancient Harihareshwar temple, the Dakshin Kashi of Maharashtra.",
+    location: "Harihareshwar, Raigad, Maharashtra",
+    price: 4700,
+    capacity: 5,
+    geometry: { lat: 17.9999, lng: 73.0167 },
+    images: [{ url: "https://images.unsplash.com/photo-1548574505-5e239809ee19", filename: "harihareshwar.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Pune Hinjewadi Tech Apartment",
+    description: "Fully furnished studio apartment near Hinjewadi IT Park, perfect for work stays.",
+    location: "Hinjewadi, Pune, Maharashtra",
+    price: 2900,
+    capacity: 2,
+    geometry: { lat: 18.5988, lng: 73.7632 },
+    images: [{ url: "https://images.unsplash.com/photo-1536376072261-38c75010e6c9", filename: "wakad_apt.jpg" }],
+    type: "apartment",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Tadoba Jungle Lodge",
+    description: "Premium wildlife lodge inside Tadoba Andhari Tiger Reserve buffer zone with safari access.",
+    location: "Tadoba, Chandrapur, Maharashtra",
+    price: 13000,
+    capacity: 4,
+    geometry: { lat: 20.3757, lng: 79.7397 },
+    images: [{ url: "https://images.unsplash.com/photo-1516426122078-c23e76319801", filename: "tadoba_lodge.jpg" }],
+    type: "cabin",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Malvan Marine Sanctuary Cottage",
+    description: "Cottage next to Malvan Marine Sanctuary — India's first marine protected area, great for scuba.",
+    location: "Malvan, Sindhudurg, Maharashtra",
+    price: 5100,
+    capacity: 4,
+    geometry: { lat: 16.0601, lng: 73.4662 },
+    images: [{ url: "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba", filename: "malvan_cottage.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Navi Mumbai Waterfront Suite",
+    description: "Elegant suite overlooking Palm Beach Road with CBD Belapur skyline and creek views.",
+    location: "Belapur, Navi Mumbai, Maharashtra",
+    price: 7800,
+    capacity: 3,
+    geometry: { lat: 19.0368, lng: 73.0158 },
+    images: [{ url: "https://images.unsplash.com/photo-1618773928121-c32242e63f39", filename: "navimumbai_suite.jpg" }],
+    type: "hotel",
+    isAvailable: false,
+    host: HOST_ID,
+  },
+  {
+    name: "Dahanu Chikoo Farm Stay",
+    description: "Unique farm stay inside a chikoo orchard with direct beach access in Dahanu.",
+    location: "Dahanu, Palghar, Maharashtra",
+    price: 3500,
+    capacity: 5,
+    geometry: { lat: 19.9766, lng: 72.7189 },
+    images: [{ url: "https://images.unsplash.com/photo-1500076656116-558758f991c1", filename: "dahanu_farm.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Raigad Fort Base Homestay",
+    description: "Homestay at the base of Raigad Fort, the historic capital of Chhatrapati Shivaji Maharaj.",
+    location: "Mahad, Raigad, Maharashtra",
+    price: 2700,
+    capacity: 4,
+    geometry: { lat: 18.0716, lng: 73.4153 },
+    images: [{ url: "https://images.unsplash.com/photo-1600585154526-990dced4db0d", filename: "mahad_homestay.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Amboli Ghat Rainforest Villa",
+    description: "Exclusive villa in Amboli Ghat, one of the wettest biodiversity hotspots in Maharashtra.",
+    location: "Amboli, Sindhudurg, Maharashtra",
+    price: 8200,
+    capacity: 6,
+    geometry: { lat: 15.9614, lng: 74.0028 },
+    images: [{ url: "https://images.unsplash.com/photo-1552083375-1447ce886485", filename: "amboli_villa.jpg" }],
+    type: "villa",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Wardha Sevagram Ashram Stay",
+    description: "Simple and soulful stay near Gandhi's Sevagram Ashram in peaceful Wardha.",
+    location: "Wardha, Maharashtra",
+    price: 1500,
+    capacity: 3,
+    geometry: { lat: 20.7453, lng: 78.6022 },
+    images: [{ url: "https://images.unsplash.com/photo-1540541338537-c3c14c82b9c1", filename: "wardha_ashram.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Latur Basalt Stone Homestay",
+    description: "Unique homestay built with traditional Deccan basalt stone architecture in Latur.",
+    location: "Latur, Maharashtra",
+    price: 2000,
+    capacity: 4,
+    geometry: { lat: 18.4088, lng: 76.5604 },
+    images: [{ url: "https://images.unsplash.com/photo-1587300003388-59208cc962cb", filename: "latur_home.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Pen Mangrove Eco Cottage",
+    description: "Eco-cottage surrounded by pristine mangrove forests in the backwaters of Raigad district.",
+    location: "Pen, Raigad, Maharashtra",
+    price: 3700,
+    capacity: 4,
+    geometry: { lat: 18.7333, lng: 73.1 },
+    images: [{ url: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09", filename: "pen_mangrove.jpg" }],
+    type: "cottage",
+    isAvailable: true,
+    host: HOST_ID,
+  },
+  {
+    name: "Kasara Gorge Adventure Cabin",
+    description: "Adventure cabin near Kasara gorge with river crossing and rock climbing options nearby.",
+    location: "Kasara, Nashik, Maharashtra",
+    price: 3100,
+    capacity: 3,
+    geometry: { lat: 19.5651, lng: 73.4693 },
+    images: [{ url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b", filename: "kasara_cabin.jpg" }],
+    type: "cabin",
+    isAvailable: true,
+    host: HOST_ID,
+  },
 ];
+
 async function seedStays() {
   try {
-    await Stay.deleteMany({})
-    console.log('Cleared existing stays')
+    await Stay.deleteMany({});
+    console.log("Cleared existing stays");
 
-    const inserted = await Stay.insertMany(stays)
-    console.log(`Seeded ${inserted.length} stays successfully`)
-    await Stay.updateMany(
-  {},
-  {
-    $set: {
-      host: new mongoose.Types.ObjectId("6a2cf5ed7bfabd297190417e")
-    }
-  }
-);
+    const inserted = await Stay.insertMany(stays);
+    console.log(`Seeded ${inserted.length} stays successfully`);
 
-    await mongoose.disconnect()
-    console.log('Disconnected')
+    await mongoose.disconnect();
+    console.log("Disconnected");
   } catch (err) {
-    console.error('Seeding failed:', err)
-    process.exit(1)
+    console.error("Seeding failed:", err);
+    process.exit(1);
   }
 }
 
-
-seedStays()
+seedStays();

@@ -293,20 +293,20 @@
                         <!-- Check-in Date -->
                         <div class="col-md-6">
                             <label class="form-label">Check-in</label>
-                            <input type="date" name="checkIn" class="custom-input" required>
+                            <input type="text" name="checkIn" class="custom-input bg-white" placeholder="Select Date" required>
                         </div>
 
                         <!-- Check-out Date -->
                         <div class="col-md-6">
                             <label class="form-label">Check-out</label>
-                            <input type="date" name="checkOut" class="custom-input" required>
+                            <input type="text" name="checkOut" class="custom-input bg-white" placeholder="Select Date" required>
                         </div>
                     </div>
 
                     <!-- Guests -->
                     <div class="mb-3">
                         <label class="form-label">Number of Guests</label>
-                        <input type="number" name="guests" class="custom-input" min="1" max="<%= stay.capacity || stay.maxGuests || 10 %>"
+                        <input type="number" name="guests" class="custom-input bg-white" min="1" max="<%= stay.capacity || stay.maxGuests || 10 %>"
                             placeholder="Enter number of guests" required>
                     </div>
                     
@@ -335,7 +335,8 @@
                     <input type="hidden" name="nights" id="nightsInput">
 
                     <!-- Submit -->
-                    <button type="submit" class="btn-booking">
+                    <div id="bookingError" class="text-danger text-center small fw-bold mb-3" style="display: none;"></div>
+                    <button type="submit" class="btn-booking" id="submitBtn">
                         Proceed to Payment
                     </button>
 
@@ -349,22 +350,88 @@
     </div>
 </div>
 
+    <!-- Flatpickr CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <script>
         const pricePerNight = "<%= stay.price %>";
+        const bookedRanges = <%- bookedRanges || '[]' %>;
 
-        const checkIn = document.querySelector('input[name="checkIn"]');
-        const checkOut = document.querySelector('input[name="checkOut"]');
+        const checkInInput = document.querySelector('input[name="checkIn"]');
+        const checkOutInput = document.querySelector('input[name="checkOut"]');
+        const errorDiv = document.getElementById("bookingError");
+        const submitBtn = document.getElementById("submitBtn");
 
-        // Set min date to today
-        const today = new Date().toISOString().split("T")[0];
-        checkIn.min = today;
-        checkOut.min = today;
+        // Format disabled dates for Flatpickr
+        const disabledDates = bookedRanges.map(range => {
+            // Subtracting 1 day from checkout because checkout day is technically available for someone else's checkin, 
+            // but Flatpickr disables the whole day if we don't adjust it. Let's just pass the exact range.
+            // If they overlap, our backend logic already handles it.
+            return {
+                from: new Date(range.checkIn),
+                to: new Date(range.checkOut)
+            };
+        });
+
+        // Initialize Flatpickr for Check-out
+        const checkoutPicker = flatpickr(checkOutInput, {
+            minDate: "today",
+            disable: disabledDates,
+            dateFormat: "Y-m-d",
+            onChange: function() {
+                calculateTotal();
+            }
+        });
+
+        // Initialize Flatpickr for Check-in
+        const checkinPicker = flatpickr(checkInInput, {
+            minDate: "today",
+            disable: disabledDates,
+            dateFormat: "Y-m-d",
+            onChange: function(selectedDates, dateStr, instance) {
+                if (selectedDates.length > 0) {
+                    // Update checkOut min date to be at least the check-in date
+                    checkoutPicker.set("minDate", selectedDates[0]);
+                    calculateTotal();
+                }
+            }
+        });
+        
+        function checkOverlap(inDate, outDate) {
+            for (let range of bookedRanges) {
+                const bIn = new Date(range.checkIn);
+                const bOut = new Date(range.checkOut);
+                
+                // Dates overlap if checkIn is before existing checkOut AND checkOut is after existing checkIn
+                if (inDate < bOut && outDate > bIn) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         function calculateTotal() {
-            const inDate = new Date(checkIn.value);
-            const outDate = new Date(checkOut.value);
+            const inDate = checkInInput.value ? new Date(checkInInput.value) : null;
+            const outDate = checkOutInput.value ? new Date(checkOutInput.value) : null;
 
-            if (checkIn.value && checkOut.value && outDate > inDate) {
+            if (inDate && outDate && outDate > inDate) {
+                if (checkOverlap(inDate, outDate)) {
+                    document.getElementById("nightCount").textContent = "-";
+                    document.getElementById("totalPrice").textContent = "-";
+                    errorDiv.textContent = "Your selected date range includes days that are already booked. Please adjust your dates.";
+                    errorDiv.style.display = "block";
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = "0.5";
+                    submitBtn.style.cursor = "not-allowed";
+                    return;
+                } else {
+                    errorDiv.style.display = "none";
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "1";
+                    submitBtn.style.cursor = "pointer";
+                }
+
                 const nights = Math.ceil((outDate - inDate) / (1000 * 60 * 60 * 24));
                 const total = nights * pricePerNight;
 
@@ -375,14 +442,11 @@
             } else {
                 document.getElementById("nightCount").textContent = "-";
                 document.getElementById("totalPrice").textContent = "-";
+                errorDiv.style.display = "none";
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
+                submitBtn.style.cursor = "pointer";
             }
         }
-
-        checkIn.addEventListener("change", () => {
-            checkOut.min = checkIn.value;
-            calculateTotal();
-        });
-
-        checkOut.addEventListener("change", calculateTotal);
     </script>
 </div>

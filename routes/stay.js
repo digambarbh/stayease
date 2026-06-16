@@ -8,6 +8,7 @@ const isHost = require("../middleware/isHost")
 const multer = require("multer")
 const { cloudinary, storage } = require("../cloudinary")
 const User = require('../model/user')
+const { validateStay } = require("../middleware/validate");
 const upload = multer({ storage })
 router.get("/", catchAsync(async (req, res) => {
     const stays = await Stay.find({})
@@ -24,7 +25,7 @@ router.get('/:id', catchAsync(async (req, res) => {
 }))
 
 
-router.post('/new', checkAuth, isHost, upload.array('image'), catchAsync(async (req, res) => {
+router.post('/new', checkAuth, isHost, upload.array('image'), validateStay, catchAsync(async (req, res) => {
 
     const stay = new Stay(req.body.stay);
 
@@ -79,7 +80,7 @@ router.get("/:id/update", checkAuth, isHost, catchAsync(async (req, res) => {
     }
     res.render("stay/update", { stay })
 }))
-router.patch("/:id", checkAuth, isHost, upload.array('image'), catchAsync(async (req, res) => {
+router.patch("/:id", checkAuth, isHost, upload.array('image'), validateStay, catchAsync(async (req, res) => {
     const { id } = req.params;
     const stay = await Stay.findById(id)
     // Error: any host could update another host's stay.
