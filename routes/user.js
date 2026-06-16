@@ -171,7 +171,7 @@ router.get("/host/dashboard",checkAuth,isHost,catchAsync(async(req,res)=>{
         };
     });
 
-    res.render("user/hostdashboard", {
+    res.render("user/hostDashboard", {
         totalStays,
         totalBookings,
         totalEarnings,
