@@ -11,8 +11,45 @@ const User = require('../model/user')
 const { validateStay } = require("../middleware/validate");
 const upload = multer({ storage })
 router.get("/", catchAsync(async (req, res) => {
-    const stays = await Stay.find({})
-    res.render("stay/stays", { stays })
+    const { type, minPrice, maxPrice, bedrooms, sort, page = 1 } = req.query;
+    
+    // Build filter query
+    const filter = {};
+    if (type) filter.type = type;
+    if (minPrice || maxPrice) {
+        filter.price = {};
+        if (minPrice) filter.price.$gte = Number(minPrice);
+        if (maxPrice) filter.price.$lte = Number(maxPrice);
+    }
+    if (bedrooms) filter.capacity = { $gte: Number(bedrooms) };
+    
+    // Build sort option
+    let sortOption = {};
+    if (sort === 'price_asc') sortOption.price = 1;
+    else if (sort === 'price_desc') sortOption.price = -1;
+    else if (sort === 'newest') sortOption.createdAt = -1;
+    
+    // Pagination
+    const limit = 12;
+    const skip = (Number(page) - 1) * limit;
+    
+    const staysPromise = Stay.find(filter)
+        .sort(sortOption)
+        .skip(skip)
+        .limit(limit)
+        .lean();
+        
+    const countPromise = Stay.countDocuments(filter);
+    
+    const [stays, totalStays] = await Promise.all([staysPromise, countPromise]);
+    const totalPages = Math.ceil(totalStays / limit);
+    
+    res.render("stay/stays", { 
+        stays, 
+        currentPage: Number(page), 
+        totalPages,
+        query: req.query 
+    });
 }))
 
 router.get('/new', checkAuth, isHost, (req, res) => {

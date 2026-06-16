@@ -138,6 +138,40 @@
 
         </div>
 
+        <!-- Pagination -->
+        <% if (totalPages > 1) { %>
+            <nav aria-label="Stay navigation" class="mt-5">
+                <ul class="pagination justify-content-center border-0">
+                    
+                    <% 
+                    const getPageUrl = (pageNum) => {
+                        let queryParams = [];
+                        for (let key in query) {
+                            if (key !== 'page' && query[key]) {
+                                queryParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(query[key]));
+                            }
+                        }
+                        queryParams.push('page=' + pageNum);
+                        return '/stays?' + queryParams.join('&');
+                    };
+                    %>
+                
+                    <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                        <a class="page-link text-dark rounded-pill me-2 px-3 fw-bold" href="<%= currentPage > 1 ? getPageUrl(currentPage - 1) : '#' %>" style="border: none; background: <%= currentPage === 1 ? 'transparent' : '#f8f9fa' %>">Previous</a>
+                    </li>
+                    
+                    <% for(let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                            <a class="page-link rounded-circle mx-1 d-flex align-items-center justify-content-center fw-bold" href="<%= getPageUrl(i) %>" style="width: 40px; height: 40px; border: none; <%= currentPage === i ? 'background-color: #222222; color: white;' : 'color: #222222; background: transparent;' %>"><%= i %></a>
+                        </li>
+                    <% } %>
+                    
+                    <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                        <a class="page-link text-dark rounded-pill ms-2 px-3 fw-bold" href="<%= currentPage < totalPages ? getPageUrl(currentPage + 1) : '#' %>" style="border: none; background: <%= currentPage === totalPages ? 'transparent' : '#f8f9fa' %>">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        <% } %>
 
     </section>
     <style>

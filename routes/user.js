@@ -90,16 +90,11 @@ router.post("/logout",catchAsync(async(req,res)=>{
 }))
 
 router.get("/my/bookings",checkAuth,catchAsync(async(req,res)=>{
-    const id=req.user;
-    const user=await User.findById(id).populate("bookings")
-    const bookings=user.bookings;
-    const stayId=bookings.map(booking=>booking.stay)
-    if(!stayId){
+    const bookings = await Booking.find({ user: req.user }).populate('stay').lean();
+    if(!bookings || bookings.length === 0){
          return res.send("You have no booking !!! ")
     }
-    const stays=await Stay.find({
-        _id:{$in:stayId}
-    })
+    const stays = bookings.map(b => b.stay).filter(Boolean);
     res.render('user/myBookings',{stays})
 }))
 
@@ -115,19 +110,19 @@ router.get("/my/bookings/:id",checkAuth,catchAsync(async(req,res)=>{
 }))
 
 router.get("/profile",checkAuth,catchAsync(async(req,res)=>{
-    const user=await User.findById(req.user)
-    .populate("bookings")
-    .populate('stay')
+    const user = await User.findById(req.user)
+        .populate("bookings")
+        .populate('stay')
+        .lean();
     res.render("user/profile",{user})
 }))
 
 
 router.get("/wishlist",checkAuth,catchAsync(async(req,res)=>{
     const userId = req.user
-    const user = await User.findById(userId).populate("wishlist")
-    const wishlist = user.wishlist
+    const user = await User.findById(userId).populate("wishlist").lean();
+    const wishlist = user.wishlist;
     res.render("user/wishlist",{wishlist})
-
 }))
 
 router.get("/wishlist/:id",checkAuth,catchAsync(async(req,res)=>{
@@ -142,13 +137,14 @@ router.get("/wishlist/:id",checkAuth,catchAsync(async(req,res)=>{
 }))
 
 router.get("/host/dashboard",checkAuth,isHost,catchAsync(async(req,res)=>{
-    const hostStays = await Stay.find({ host: req.user });
+    const hostStays = await Stay.find({ host: req.user }).lean();
     
     const bookings = await Booking.find({
         host: req.user
     })
     .populate("user")
-    .populate("stay");
+    .populate("stay")
+    .lean();
 
     const totalStays = hostStays.length;
     const totalBookings = bookings.length;
