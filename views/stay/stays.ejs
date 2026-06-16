@@ -140,29 +140,53 @@
 
         <!-- Pagination -->
         <% if (totalPages > 1) { %>
-            <nav aria-label="Stay navigation" class="mt-5">
+            <% 
+            const getPageUrl = (pageNum) => {
+                let queryParams = [];
+                for (let key in query) {
+                    if (key !== 'page' && query[key]) {
+                        queryParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(query[key]));
+                    }
+                }
+                queryParams.push('page=' + pageNum);
+                return '/stays?' + queryParams.join('&');
+            };
+
+            let startPage = Math.max(1, currentPage - 1);
+            let endPage = Math.min(totalPages, currentPage + 1);
+
+            if (currentPage <= 2) endPage = Math.min(totalPages, 3);
+            if (currentPage >= totalPages - 1) startPage = Math.max(1, totalPages - 2);
+            %>
+
+            <!-- Desktop Pagination -->
+            <nav aria-label="Desktop Stay navigation" class="mt-5 d-none d-sm-block">
                 <ul class="pagination justify-content-center border-0">
-                    
-                    <% 
-                    const getPageUrl = (pageNum) => {
-                        let queryParams = [];
-                        for (let key in query) {
-                            if (key !== 'page' && query[key]) {
-                                queryParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(query[key]));
-                            }
-                        }
-                        queryParams.push('page=' + pageNum);
-                        return '/stays?' + queryParams.join('&');
-                    };
-                    %>
-                
                     <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
                         <a class="page-link text-dark rounded-pill me-2 px-3 fw-bold" href="<%= currentPage > 1 ? getPageUrl(currentPage - 1) : '#' %>" style="border: none; background: <%= currentPage === 1 ? 'transparent' : '#f8f9fa' %>">Previous</a>
                     </li>
+
+                    <% if (startPage > 1) { %>
+                        <li class="page-item">
+                            <a class="page-link rounded-circle mx-1 d-flex align-items-center justify-content-center fw-bold" href="<%= getPageUrl(1) %>" style="width: 40px; height: 40px; border: none; color: #222222; background: transparent;">1</a>
+                        </li>
+                        <% if (startPage > 2) { %>
+                            <li class="page-item disabled"><span class="page-link border-0 bg-transparent text-dark">...</span></li>
+                        <% } %>
+                    <% } %>
                     
-                    <% for(let i = 1; i <= totalPages; i++) { %>
+                    <% for(let i = startPage; i <= endPage; i++) { %>
                         <li class="page-item <%= currentPage === i ? 'active' : '' %>">
                             <a class="page-link rounded-circle mx-1 d-flex align-items-center justify-content-center fw-bold" href="<%= getPageUrl(i) %>" style="width: 40px; height: 40px; border: none; <%= currentPage === i ? 'background-color: #222222; color: white;' : 'color: #222222; background: transparent;' %>"><%= i %></a>
+                        </li>
+                    <% } %>
+
+                    <% if (endPage < totalPages) { %>
+                        <% if (endPage < totalPages - 1) { %>
+                            <li class="page-item disabled"><span class="page-link border-0 bg-transparent text-dark">...</span></li>
+                        <% } %>
+                        <li class="page-item">
+                            <a class="page-link rounded-circle mx-1 d-flex align-items-center justify-content-center fw-bold" href="<%= getPageUrl(totalPages) %>" style="width: 40px; height: 40px; border: none; color: #222222; background: transparent;"><%= totalPages %></a>
                         </li>
                     <% } %>
                     
@@ -170,6 +194,25 @@
                         <a class="page-link text-dark rounded-pill ms-2 px-3 fw-bold" href="<%= currentPage < totalPages ? getPageUrl(currentPage + 1) : '#' %>" style="border: none; background: <%= currentPage === totalPages ? 'transparent' : '#f8f9fa' %>">Next</a>
                     </li>
                 </ul>
+            </nav>
+
+            <!-- Mobile Pagination -->
+            <nav aria-label="Mobile Stay navigation" class="mt-4 d-block d-sm-none">
+                <div class="d-flex justify-content-between align-items-center" style="padding: 0 10px;">
+                    <a class="btn btn-outline-dark rounded-pill fw-bold <%= currentPage === 1 ? 'disabled' : '' %>" 
+                       href="<%= currentPage > 1 ? getPageUrl(currentPage - 1) : '#' %>"
+                       style="border-width: 1.5px; padding: 8px 24px;">
+                       Prev
+                    </a>
+                    <span class="fw-bold" style="color: #222222; font-size: 0.95rem;">
+                        <%= currentPage %> <span class="text-muted fw-normal mx-1">of</span> <%= totalPages %>
+                    </span>
+                    <a class="btn btn-outline-dark rounded-pill fw-bold <%= currentPage === totalPages ? 'disabled' : '' %>" 
+                       href="<%= currentPage < totalPages ? getPageUrl(currentPage + 1) : '#' %>"
+                       style="border-width: 1.5px; padding: 8px 24px;">
+                       Next
+                    </a>
+                </div>
             </nav>
         <% } %>
 
