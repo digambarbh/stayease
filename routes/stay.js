@@ -90,6 +90,14 @@ router.get('/:id', catchAsync(async (req, res) => {
 
 router.post('/new', checkAuth, isHost, upload.array('image'), validateStay, catchAsync(async (req, res) => {
 
+    if (req.files && req.files.length > 5) {
+        for (let f of req.files) {
+            await cloudinary.uploader.destroy(f.filename);
+        }
+        res.cookie("flash", { type: "danger", message: "You can only upload up to 5 images per stay." });
+        return res.redirect('/stays/new');
+    }
+
     const stay = new Stay(req.body.stay);
 
     stay.images = req.files.map(f => ({
@@ -158,22 +166,26 @@ router.patch("/:id", checkAuth, isHost, upload.array('image'), validateStay, cat
         }
     }
 
-    // Add newly uploaded images (if any)
-    if (req.files && req.files.length > 0) {
-        const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
-        stay.images.push(...imgs)
-    }
-
-    // Handle deletion of selected images
+    // Handle deletion of selected images FIRST so we have the true remaining count
     if (req.body.deleteImages) {
-        // deleteImages may be a single string or an array
         const toDelete = Array.isArray(req.body.deleteImages) ? req.body.deleteImages : [req.body.deleteImages]
         for (const filename of toDelete) {
-            // remove from cloudinary
             await cloudinary.uploader.destroy(filename)
-            // remove from stay.images
             stay.images = stay.images.filter(img => img.filename !== filename)
         }
+    }
+
+    // Add newly uploaded images (if any)
+    if (req.files && req.files.length > 0) {
+        if (stay.images.length + req.files.length > 5) {
+            for (let f of req.files) {
+                await cloudinary.uploader.destroy(f.filename);
+            }
+            res.cookie("flash", { type: "danger", message: "You can only have up to 5 images per stay." });
+            return res.redirect(`/stays/${id}/update`);
+        }
+        const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
+        stay.images.push(...imgs)
     }
     const response = await fetch(
         `https://api.maptiler.com/geocoding/${encodeURIComponent(
