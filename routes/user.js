@@ -24,13 +24,17 @@ router.get('/register', (req, res) => {
 
 router.post('/register', validateRegister, async (req, res, next) => {
     try {
-        const { username, email, phone, role } = req.body
+        let { username, email, phone, role } = req.body
+        // Security: Prevent malicious injection of the admin role
+        if (role !== 'host') {
+            role = 'user'; 
+        }
         const password = await bcrypt.hash(req.body.password, 12)
         const user = await User.create({ username, email, phone, password, role })
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' })
         const cookieOption = {
             httpOnly: true,
-            secure: false,
+            secure: true,
         }
         res.cookie("token",token,cookieOption)
         res.cookie("flash",{type:"success",message:"Welcome to StayEase"})
@@ -61,6 +65,10 @@ router.post("/login",AuthLimiter, validateLogin, catchAsync(async (req, res) => 
         res.cookie("flash",{type:"danger",message:"username or password incorrect"})
         return res.redirect("/user/login")
     }
+    if (user.isBlocked) {
+        res.cookie("flash", { type: "danger", message: "Your account has been blocked by an administrator." });
+        return res.redirect("/user/login");
+    }
     const match = await bcrypt.compare(password, user.password)
     if (!match) {
         res.cookie("flash",{type:"danger",message:"username or password incorrect"})
@@ -69,7 +77,7 @@ router.post("/login",AuthLimiter, validateLogin, catchAsync(async (req, res) => 
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' })
     const cookieOption = {
         httpOnly: true,
-        secure: false,
+        secure: true,
     }
     res.cookie("token", token, cookieOption)
     res.cookie("flash",{type:"success",message:"Welcome Back"})

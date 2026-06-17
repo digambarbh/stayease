@@ -12,6 +12,10 @@ const userSchema = new Schema({
     enum: ['user', 'host', 'admin'],
     default: 'user'
   },
+  isBlocked: {
+    type: Boolean,
+    default: false
+  },
 
   // Relations
   wishlist: [{ type: Schema.Types.ObjectId, ref: 'Stay' }],

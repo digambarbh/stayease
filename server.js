@@ -72,6 +72,12 @@ app.use(async (req, res, next) => {
             process.env.JWT_SECRET
         );
         const user = await User.findById(payload.id).select('-password')
+        if (user && user.isBlocked) {
+            res.clearCookie("token");
+            res.locals.currentUser = null;
+            res.locals.isLoggedIn = false;
+            return next();
+        }
         res.locals.currentUser = user
         res.locals.isLoggedIn = true
         res.locals.Role = user.role
@@ -117,11 +123,13 @@ app.get('/', async (req, res) => {
     });
 })
 const reviewRoute = require("./routes/review")
+const adminRoute = require("./routes/admin")
 
 app.use("/user", userRoute);
 app.use("/stays", stayRoute);
 app.use("/bookings", bookingRoute);
 app.use("/stays/:id/reviews", reviewRoute);
+app.use("/admin", adminRoute);
 app.use((req, res, next) => {
     res.status(404).render('404');
 });

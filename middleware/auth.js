@@ -15,6 +15,15 @@ const checkAuth = async (req, res, next) => {
             return res.redirect("/user/login")
         }
         const payload = jwt.verify(token, process.env.JWT_SECRET)
+        
+        // Fetch user to check blocked status
+        const user = await User.findById(payload.id);
+        if (!user || user.isBlocked) {
+            res.clearCookie("token");
+            res.cookie("flash", { type: "danger", message: "Your account has been blocked by an administrator." });
+            return res.redirect("/user/login");
+        }
+        
         req.user = payload.id
         next()
     }

@@ -1,0 +1,443 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+    body {
+        background-color: #f8fafc;
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* Premium Header */
+    .admin-header {
+        position: relative;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: white;
+        padding: 4rem 0 6rem; /* Extra padding at bottom for overlap effect */
+        border-radius: 0 0 2.5rem 2.5rem;
+        box-shadow: 0 10px 40px rgba(15, 23, 42, 0.15);
+        overflow: hidden;
+    }
+
+    /* Abstract background pattern in header */
+    .admin-header::before {
+        content: '';
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        background-image: radial-gradient(circle at top right, rgba(255,255,255,0.05) 0%, transparent 40%),
+                          radial-gradient(circle at bottom left, rgba(255,255,255,0.05) 0%, transparent 40%);
+        pointer-events: none;
+    }
+
+    /* Stat Cards Overlap */
+    .stats-container {
+        margin-top: -3.5rem;
+        position: relative;
+        z-index: 10;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 1.25rem;
+        padding: 1.75rem;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+        border: 1px solid rgba(255, 255, 255, 1);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .stat-icon {
+        width: 65px;
+        height: 65px;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        flex-shrink: 0;
+    }
+
+    .stat-icon.users { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); color: #4f46e5; }
+    .stat-icon.stays { background: linear-gradient(135deg, #dcfce7, #bbf7d0); color: #16a34a; }
+    .stat-icon.bookings { background: linear-gradient(135deg, #fef08a, #fde047); color: #ca8a04; }
+    .stat-icon.reviews { background: linear-gradient(135deg, #ffedd5, #fed7aa); color: #ea580c; }
+    
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.2;
+    }
+
+    .stat-label {
+        color: #64748b;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.25rem;
+    }
+
+    /* Dashboard Sections & Tabs */
+    .nav-pills {
+        background: #e2e8f0;
+        padding: 0.5rem;
+        border-radius: 3rem;
+        display: inline-flex;
+        gap: 0.5rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        max-width: 100%;
+    }
+
+    /* Hide scrollbar for mobile tabs */
+    .nav-pills::-webkit-scrollbar { display: none; }
+    .nav-pills { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .nav-pills .nav-link {
+        color: #475569;
+        font-weight: 600;
+        border-radius: 2.5rem;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.2s;
+    }
+
+    .nav-pills .nav-link:hover {
+        background: rgba(255,255,255,0.5);
+    }
+
+    .nav-pills .nav-link.active {
+        background: white;
+        color: #0f172a;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .dashboard-section {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        border: 1px solid rgba(0,0,0,0.02);
+        margin-bottom: 3rem;
+    }
+
+    /* Premium Tables */
+    .table {
+        margin-bottom: 0;
+    }
+    .table th {
+        border-top: none;
+        border-bottom: 2px solid #f1f5f9;
+        color: #64748b;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 1rem;
+    }
+    .table td {
+        border-bottom: 1px solid #f1f5f9;
+        padding: 1.2rem 1rem;
+        vertical-align: middle;
+        color: #334155;
+    }
+    .table tbody tr {
+        transition: background-color 0.15s;
+    }
+    .table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Badges & Pills */
+    .badge-role {
+        padding: 0.5em 1em;
+        border-radius: 2rem;
+        font-weight: 700;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+    }
+    .badge-role.user { background: #f1f5f9; color: #475569; }
+    .badge-role.host { background: #eff6ff; color: #2563eb; }
+    .badge-role.admin { background: #fdf2f8; color: #db2777; }
+
+    .status-pill {
+        padding: 0.5em 1em;
+        border-radius: 2rem;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .status-active { background: #dcfce7; color: #16a34a; }
+    .status-blocked { background: #fee2e2; color: #dc2626; }
+    .status-warning { background: #fef3c7; color: #d97706; }
+
+    /* Action Buttons */
+    .btn-action {
+        padding: 0.4rem 1.2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+    }
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Mobile Adjustments */
+    @media (max-width: 768px) {
+        .admin-header {
+            padding: 2.5rem 0 5rem;
+            border-radius: 0 0 1.5rem 1.5rem;
+        }
+        .dashboard-section {
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+        .stat-card {
+            padding: 1.25rem;
+            gap: 1rem;
+        }
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.25rem;
+        }
+        .stat-value { font-size: 1.4rem; }
+        .table td { padding: 1rem 0.5rem; }
+    }
+</style>
+
+<div class="admin-header">
+    <div class="container text-center text-md-start">
+        <h1 class="fw-bold mb-2" style="font-size: 2.5rem; letter-spacing: -1px;">Admin Dashboard</h1>
+        <p class="text-white-50 mb-0" style="font-size: 1.1rem;">Platform metrics and centralized management</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    
+    <!-- Stats Row -->
+    <div class="row g-4 stats-container mb-5">
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon users"><i class="fa-solid fa-users"></i></div>
+                <div>
+                    <div class="stat-value"><%= totalUsers %></div>
+                    <div class="stat-label">Users</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon stays"><i class="fa-solid fa-house"></i></div>
+                <div>
+                    <div class="stat-value"><%= totalStays %></div>
+                    <div class="stat-label">Stays</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon bookings"><i class="fa-solid fa-calendar-check"></i></div>
+                <div>
+                    <div class="stat-value"><%= totalBookings %></div>
+                    <div class="stat-label">Bookings</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon reviews"><i class="fa-solid fa-star"></i></div>
+                <div>
+                    <div class="stat-value"><%= totalReviews %></div>
+                    <div class="stat-label">Reviews</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="text-center text-md-start mb-4">
+        <ul class="nav nav-pills" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="users-tab" data-bs-toggle="pill" data-bs-target="#users" type="button" role="tab">Users</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="stays-tab" data-bs-toggle="pill" data-bs-target="#stays" type="button" role="tab">Properties</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="bookings-tab" data-bs-toggle="pill" data-bs-target="#bookings" type="button" role="tab">Bookings</button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="tab-content" id="adminTabsContent">
+        
+        <!-- Users Tab -->
+        <div class="tab-pane fade show active" id="users" role="tabpanel">
+            <div class="dashboard-section">
+                <h4 class="fw-bold mb-4" style="color: #0f172a; letter-spacing: -0.5px;">User Directory</h4>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Contact</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% recentUsers.forEach(user => { %>
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold text-dark"><%= user.username %></div>
+                                    </td>
+                                    <td>
+                                        <div class="text-muted"><%= user.email %></div>
+                                        <div class="small text-muted"><%= user.phone %></div>
+                                    </td>
+                                    <td>
+                                        <span class="badge-role <%= user.role %>"><%= user.role.toUpperCase() %></span>
+                                    </td>
+                                    <td class="text-muted small fw-medium">
+                                        <%= new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                                    </td>
+                                    <td>
+                                        <% if (user.isBlocked) { %>
+                                            <span class="status-pill status-blocked">Blocked</span>
+                                        <% } else { %>
+                                            <span class="status-pill status-active">Active</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="text-end">
+                                        <% if (!user._id.equals(currentUser._id)) { %>
+                                            <form action="/admin/users/<%= user._id %>/toggle-block" method="POST" class="d-inline">
+                                                <% if (user.isBlocked) { %>
+                                                    <button type="submit" class="btn btn-outline-success btn-action">Unblock</button>
+                                                <% } else { %>
+                                                    <button type="submit" class="btn btn-outline-danger btn-action">Block</button>
+                                                <% } %>
+                                            </form>
+                                        <% } else { %>
+                                            <span class="text-muted small fw-semibold">Current Admin</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stays Tab -->
+        <div class="tab-pane fade" id="stays" role="tabpanel">
+            <div class="dashboard-section">
+                <h4 class="fw-bold mb-4" style="color: #0f172a; letter-spacing: -0.5px;">Property Monitor</h4>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Host</th>
+                                <th>Location</th>
+                                <th>Pricing</th>
+                                <th class="text-end">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% recentStays.forEach(stay => { %>
+                                <tr>
+                                    <td>
+                                        <a href="/stays/<%= stay._id %>" class="fw-bold text-dark text-decoration-none hover-primary">
+                                            <%= stay.name %>
+                                        </a>
+                                        <div class="small text-muted text-uppercase mt-1 fw-bold"><%= stay.type %></div>
+                                    </td>
+                                    <td class="fw-medium"><%= stay.host ? stay.host.username : 'Unknown' %></td>
+                                    <td class="text-muted"><%= stay.location %></td>
+                                    <td class="fw-bold text-dark">₹<%= stay.price %><span class="text-muted small fw-normal"> / night</span></td>
+                                    <td class="text-end">
+                                        <% if (stay.isAvailable) { %>
+                                            <span class="status-pill status-active">Available</span>
+                                        <% } else { %>
+                                            <span class="status-pill status-blocked">Unavailable</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Tab -->
+        <div class="tab-pane fade" id="bookings" role="tabpanel">
+            <div class="dashboard-section">
+                <h4 class="fw-bold mb-4" style="color: #0f172a; letter-spacing: -0.5px;">Reservation Log</h4>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Reservation ID</th>
+                                <th>Guest</th>
+                                <th>Property</th>
+                                <th>Stay Dates</th>
+                                <th>Total</th>
+                                <th class="text-end">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% recentBookings.forEach(booking => { %>
+                                <tr>
+                                    <td class="text-muted small fw-bold font-monospace">#<%= booking._id.toString().substring(0, 8) %></td>
+                                    <td class="fw-bold text-dark"><%= booking.user ? booking.user.username : 'Unknown' %></td>
+                                    <td>
+                                        <% if (booking.stay) { %>
+                                            <a href="/stays/<%= booking.stay._id %>" class="fw-medium text-dark text-decoration-none">
+                                                <%= booking.stay.name %>
+                                            </a>
+                                        <% } else { %>
+                                            <span class="text-muted">Deleted Property</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="text-muted small fw-medium">
+                                        <%= new Date(booking.checkIn).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %> - 
+                                        <%= new Date(booking.checkOut).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %>
+                                    </td>
+                                    <td class="fw-bold text-dark">₹<%= booking.totalPrice %></td>
+                                    <td class="text-end">
+                                        <% if (booking.status === 'confirmed') { %>
+                                            <span class="status-pill status-active">Confirmed</span>
+                                        <% } else if (booking.status === 'cancelled') { %>
+                                            <span class="status-pill status-blocked">Cancelled</span>
+                                        <% } else { %>
+                                            <span class="status-pill status-warning"><%= booking.status %></span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
