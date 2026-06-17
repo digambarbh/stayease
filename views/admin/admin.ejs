@@ -326,7 +326,7 @@
                                     </td>
                                     <td class="text-end">
                                         <% if (!user._id.equals(currentUser._id)) { %>
-                                            <form action="/admin/users/<%= user._id %>/toggle-block" method="POST" class="d-inline">
+                                            <form action="/stayease-control-center/users/<%= user._id %>/toggle-block" method="POST" class="d-inline">
                                                 <% if (user.isBlocked) { %>
                                                     <button type="submit" class="btn btn-outline-success btn-action">Unblock</button>
                                                 <% } else { %>

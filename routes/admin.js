@@ -43,13 +43,13 @@ router.post('/users/:id/toggle-block', async (req, res, next) => {
         const user = await User.findById(req.params.id);
         if (!user) {
             res.cookie('flash', { type: 'danger', message: 'User not found.' });
-            return res.redirect('/admin/dashboard');
+            return res.redirect('/stayease-control-center/dashboard');
         }
 
         // Prevent admin from blocking themselves
         if (user._id.equals(res.locals.currentUser._id)) {
             res.cookie('flash', { type: 'danger', message: 'You cannot block yourself.' });
-            return res.redirect('/admin/dashboard');
+            return res.redirect('/stayease-control-center/dashboard');
         }
 
         user.isBlocked = !user.isBlocked;
@@ -59,7 +59,7 @@ router.post('/users/:id/toggle-block', async (req, res, next) => {
             type: 'success', 
             message: `User ${user.username} has been ${user.isBlocked ? 'blocked' : 'unblocked'} successfully.` 
         });
-        res.redirect('/admin/dashboard');
+        res.redirect('/stayease-control-center/dashboard');
     } catch (e) {
         next(e);
     }
