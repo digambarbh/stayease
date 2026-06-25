@@ -7,26 +7,59 @@ const { hasBookedStay, isReviewAuthor } = require('../middleware/reviewAuth');
 const { validateReview } = require('../middleware/validate');
 const catchAsync = require('../utility/catchAsync');
 
+const sanitizeReviewBody = (body) => {
+    if (typeof body !== 'string') return '';
+    const sanitized = body.replace(/<[^>]*>/g, '').trim();
+    return sanitized;
+};
+
+const reviewRedirect = (id, res, message) => {
+    res.cookie('flash', { type: 'danger', message });
+    return res.redirect(`/stays/${id}`);
+};
+
 // Create Review
 router.post('/', checkAuth, hasBookedStay, validateReview, catchAsync(async (req, res) => {
-    const stay = await Stay.findById(req.params.id);
-    const review = new Review(req.body.review);
-    review.author = req.user;
-    review.stay = stay._id;
-    stay.reviews.push(review);
-    
+    const { id } = req.params;
+    const stay = await Stay.findById(id);
+    if (!stay) return reviewRedirect(id, res, 'Stay not found.');
+
+    const reviewData = req.body.review || {};
+    const sanitizedBody = sanitizeReviewBody(reviewData.body);
+    if (!sanitizedBody) {
+        return reviewRedirect(id, res, 'Review text cannot be empty.');
+    }
+
+    const review = new Review({
+        rating: Number(reviewData.rating),
+        body: sanitizedBody,
+        author: req.user,
+        stay: stay._id
+    });
+
     await review.save();
+    stay.reviews.push(review._id);
     await stay.save();
-    
-    res.cookie("flash", { type: "success", message: "Review added successfully!" });
+
+    res.cookie('flash', { type: 'success', message: 'Review added successfully!' });
     res.redirect(`/stays/${stay._id}`);
 }));
 
 // Update Review
 router.put('/:reviewId', checkAuth, isReviewAuthor, validateReview, catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
-    await Review.findByIdAndUpdate(reviewId, { ...req.body.review });
-    res.cookie("flash", { type: "success", message: "Review updated successfully!" });
+    const reviewData = req.body.review || {};
+    const sanitizedBody = sanitizeReviewBody(reviewData.body);
+    if (!sanitizedBody) {
+        return reviewRedirect(id, res, 'Review text cannot be empty.');
+    }
+
+    const update = {
+        rating: Number(reviewData.rating),
+        body: sanitizedBody
+    };
+    await Review.findByIdAndUpdate(reviewId, update, { runValidators: true });
+    res.cookie('flash', { type: 'success', message: 'Review updated successfully!' });
     res.redirect(`/stays/${id}`);
 }));
 

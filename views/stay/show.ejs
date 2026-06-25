@@ -584,7 +584,11 @@
                     </div>
     </div>
     <script>
-        const stay = <%- JSON.stringify(stay) %>;
+        const stay = <%- JSON.stringify({
+            name: stay.name,
+            price: stay.price,
+            geometry: stay.geometry
+        }).replace(/</g, '\\u003c') %>;
 
         const map = new maplibregl.Map({
             container: 'map',
